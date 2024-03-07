@@ -1,0 +1,42 @@
+
+.dotfiles
+
+# ---- Filetypes
+
+*_history
+.lesshst
+
+# ---- Home Dirs
+.Trash
+.thumbnails
+
+Applications/
+Desktop/
+Documents/
+Downloads/
+Games/
+Library/
+Movies/
+Music/
+OneDrive - Western Washington/
+Pictures/
+Public/
+Repos/
+
+bin/
+.local/
+
+nltk_data/
+go/
+.cargo
+.rustup/
+.npm/
+.nvm/
+.models/
+.term_image/
+.tldrc/
+.vscode/
+.ipython/
+.cache/
+.sl_cache/
+
