@@ -7,6 +7,7 @@
 .lesshst
 
 # ---- Home Dirs
+
 .Trash
 .thumbnails
 
@@ -39,4 +40,9 @@ go/
 .ipython/
 .cache/
 .sl_cache/
+
+# ---- Config Dirs
+
+.config/motd_pictures/
+.config/nvim/venv/
 
