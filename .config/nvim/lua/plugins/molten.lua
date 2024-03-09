@@ -11,11 +11,15 @@ return {
          vim.g.molten_output_win_max_height = 20
       end,
       config = function()
-         vim.keymap.set('n', '<leader>dl', function()
+         vim.keymap.set('n', '<localleader>mi', ':MoltenInit<CR>', { silent = true, desc = '[M]olten [I]nit' })
+         vim.keymap.set('n', '<localleader>dl', function()
             vim.cmd 'MoltenEvaluateLine'
          end, { desc = '[D]o [L]ine' })
-         vim.keymap.set('v', '<localleader>d', ':<C-u>MoltenEvaluateVisual<CR>gv<ESC>', { silent = true, desc = '[D]o selection' })
-         vim.keymap.set('n', '<localleader>e', ':MoltenEvaluateOperator<CR>', { silent = true, desc = 'run operator selection' })
+         vim.keymap.set('v', '<localleader>e', ':<C-u>MoltenEvaluateVisual<CR>gv<ESC>', { silent = true, desc = '[E]val selection' })
+         vim.keymap.set('n', '<localleader>e', ':MoltenEvaluateOperator<CR>', { silent = true, desc = '[E]val operator selection' })
+         vim.keymap.set('n', '<localleader>md', ':MoltenDelete<CR>', { silent = true, desc = '[M]olten [D]elete Cell' })
+         vim.keymap.set('n', '<localleader>ma', ':MoltenReevaluateAll<CR>', { silent = true, desc = '[M]olten [R]e-Evaluate All Cells' })
+         vim.keymap.set('n', '<localleader>mr', ':MoltenReevaluateCell<CR>', { silent = true, desc = '[M]olten [R]e-Evaluate Cell' })
       end,
    },
    {
