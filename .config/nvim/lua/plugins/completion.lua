@@ -17,13 +17,6 @@ return { -- Autocompletion
       },
       'saadparwaiz1/cmp_luasnip',
 
-      -- Copilot Support
-      {
-         'zbirenbaum/copilot.lua',
-         cmd = 'Copilot',
-         event = 'InsertEnter',
-      },
-
       -- Adds other completion capabilities.
       --  nvim-cmp does not ship with all sources by default. They are split
       --  into multiple repos for maintenance purposes.
@@ -40,27 +33,8 @@ return { -- Autocompletion
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
-      local copilot = require 'copilot'
 
       luasnip.config.setup {}
-      copilot.setup {
-         suggestion = {
-            enabled = true,
-            auto_trigger = true,
-            debounce = 75,
-            keymap = {
-               -- Accept the suggestion
-               -- (M- is the modifier aka alt or option)
-               accept = '<M-l>',
-               accept_word = false,
-               accept_line = false,
-               -- Cycle through suggestions
-               next = '<M-j>',
-               prev = '<M-k>',
-               dismiss = '<C-]>',
-            },
-         },
-      }
 
       cmp.setup {
          snippet = {
