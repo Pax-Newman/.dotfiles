@@ -68,5 +68,8 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Set tab width
+vim.opt.tabstop = 4
+
 -- Point nvim to the virtualenv
 vim.g.python3_host_prog = vim.fn.expand '~/.config/nvim/venv/bin/python3'
