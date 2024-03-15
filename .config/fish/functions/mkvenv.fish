@@ -1,10 +1,11 @@
 function mkvenv --description 'Creates a new python project with a venv and pyproject.toml. Usage: mkvenv'
 	set --local help 'usage: mkvenv [-h] [-n name]
 	h help: Display this help message
-	n name: Specify a name for the venv'
+	n name: Specify a name for the venv
+	v version: Specify which version of python to use'
 	
 	# Parse the command options
-	set --local options 'h/help' 'n/name='
+	set --local options 'h/help' 'n/name=' 'v/version='
 	argparse $options -- $argv
 
 	# Display the help message
@@ -20,8 +21,15 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 		set --function venv_name '.venv'
 	end
 
+	# Set the python version
+	if set --query _flag_version
+		set --function python_version $_flag_version
+	else
+		set --function python_version '3'
+	end
+
 	# Create the virtual environment
-	python3 -m venv $venv_name
+	env (printf "python%s" $python_version) -m venv $venv_name
 
 	# Activate our new environment
 	source $venv_name/bin/activate.fish
@@ -29,6 +37,10 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 	# Install project dependencies
 
 	pip install --upgrade pip
+
+	# Setup venv jupyter kernel
+	pip install ipykernel
+	python -m ipykernel install --sys-prefix --name $venv_name
 
 	# pip install pyright
 
@@ -43,5 +55,4 @@ venvPath = \".\"
 venv = \"$venv_name\"
 " >> pyproject.toml
 	end
-
 end
