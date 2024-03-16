@@ -20,6 +20,7 @@ return {
          vim.keymap.set('n', '<localleader>md', ':MoltenDelete<CR>', { silent = true, desc = '[M]olten [D]elete Cell' })
          vim.keymap.set('n', '<localleader>ma', ':MoltenReevaluateAll<CR>', { silent = true, desc = '[M]olten [R]e-Evaluate All Cells' })
          vim.keymap.set('n', '<localleader>mr', ':MoltenReevaluateCell<CR>', { silent = true, desc = '[M]olten [R]e-Evaluate Cell' })
+         vim.keymap.set('n', '<localleader>mR', ':MoltenRestart<CR>', { silent = true, desc = '[M]olten [R]estart Kernel' })
       end,
    },
    {
