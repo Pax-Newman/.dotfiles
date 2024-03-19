@@ -44,50 +44,69 @@ return {
       end,
    },
    {
-      'Vigemus/iron.nvim',
+      'GCBallesteros/NotebookNavigator.nvim',
+      dependencies = {
+         -- "akinsho/toggleterm.nvim", -- alternative repl provider
+         'benlubas/molten-nvim',
+      },
+      event = 'VeryLazy',
       config = function()
-         local iron = require 'iron.core'
-
-         iron.setup {
-            config = {
-               -- Whether a repl should be discarded or not
-               scratch_repl = true,
-               close_window_on_exit = true,
-               -- Your repl definitions come here
-               repl_definition = {
-                  fish = {
-                     -- Can be a table or a function that
-                     -- returns a table (see below)
-                     command = { 'fish' },
-                  },
-                  python = {
-                     -- FIXME: Try to fetch the local python environment like in molten
-                     command = { 'python3' },
-                  },
-                  lua = {
-                     command = { 'redbean' },
-                  },
-               },
-               -- How the repl window will be displayed
-               -- See below for more information
-               repl_open_cmd = require('iron.view').split.botright.botright(0.2),
-            },
-            ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
-         }
-
-         -- iron also has a list of commands, see :h iron-commands for all available commands
-         vim.keymap.set('n', '<localleader>rs', ':IronRepl<CR>', { desc = '[R]epl [S]tart' })
-         vim.keymap.set('n', '<localleader>rr', ':IronRestart<CR>', { desc = '[R]epl [R]estart' })
-         vim.keymap.set('n', '<localleader>rf', ':IronFocus<CR>', { desc = '[R]epl [F]ocus' })
-         vim.keymap.set('n', '<localleader>rh', ':IronHide<CR>', { desc = '[R]epl [H]ide' })
-         vim.keymap.set('n', '<localleader>rl', require('iron').core.send_line, { desc = '[R]epl Eval [L]ine' })
-         vim.keymap.set('v', '<localleader>r', function()
-            local core = require 'iron.core'
-            local lines = core.mark_visual()
-            ---@diagnostic disable-next-line: undefined-global
-            table.insert(lines, '\n')
-            core.send(nil, lines)
-         end, { desc = '[R]epl Eval (Visual)' })
+         local nn = require 'notebook-navigator'
+         vim.keymap.set('n', '<localleader>X', nn.run_cell, { desc = 'Run [C]ell' })
+         vim.keymap.set('n', '<localleader>x', nn.run_and_move, { desc = 'Run and [M]ove' })
+         vim.keymap.set('n', ']h', function()
+            nn.move_cell 'd'
+         end, { desc = 'Move [D]own a Cell' })
+         vim.keymap.set('n', '[h', function()
+            nn.move_cell 'u'
+         end, { desc = 'Move [U]p a Cell' })
       end,
    },
+   -- {
+   --    'Vigemus/iron.nvim',
+   --    config = function()
+   --       local iron = require 'iron.core'
+   --
+   --       iron.setup {
+   --          config = {
+   --             -- Whether a repl should be discarded or not
+   --             scratch_repl = true,
+   --             close_window_on_exit = true,
+   --             -- Your repl definitions come here
+   --             repl_definition = {
+   --                fish = {
+   --                   -- Can be a table or a function that
+   --                   -- returns a table (see below)
+   --                   command = { 'fish' },
+   --                },
+   --                python = {
+   --                   -- FIXME: Try to fetch the local python environment like in molten
+   --                   command = { 'python3' },
+   --                },
+   --                lua = {
+   --                   command = { 'redbean' },
+   --                },
+   --             },
+   --             -- How the repl window will be displayed
+   --             -- See below for more information
+   --             repl_open_cmd = require('iron.view').split.botright.botright(0.2),
+   --          },
+   --          ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+   --       }
+   --
+   --       -- iron also has a list of commands, see :h iron-commands for all available commands
+   --       vim.keymap.set('n', '<localleader>rs', ':IronRepl<CR>', { desc = '[R]epl [S]tart' })
+   --       vim.keymap.set('n', '<localleader>rr', ':IronRestart<CR>', { desc = '[R]epl [R]estart' })
+   --       vim.keymap.set('n', '<localleader>rf', ':IronFocus<CR>', { desc = '[R]epl [F]ocus' })
+   --       vim.keymap.set('n', '<localleader>rh', ':IronHide<CR>', { desc = '[R]epl [H]ide' })
+   --       vim.keymap.set('n', '<localleader>rl', require('iron').core.send_line, { desc = '[R]epl Eval [L]ine' })
+   --       vim.keymap.set('v', '<localleader>r', function()
+   --          local core = require 'iron.core'
+   --          local lines = core.mark_visual()
+   --          ---@diagnostic disable-next-line: undefined-global
+   --          table.insert(lines, '\n')
+   --          core.send(nil, lines)
+   --       end, { desc = '[R]epl Eval (Visual)' })
+   --    end,
+   -- },
 }
