@@ -40,7 +40,7 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 
 	# Setup venv jupyter kernel
 	pip install ipykernel
-	python -m ipykernel install --sys-prefix --name $venv_name
+	python -m ipykernel install --user --name (basename $PWD)
 
 	# pip install pyright
 
