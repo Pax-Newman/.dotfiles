@@ -191,30 +191,30 @@ require("lazy").setup({
          pcall(require("telescope").load_extension, "ui-select")
 
          -- See `:help telescope.builtin`
-         local builtin = require 'telescope.builtin'
-         vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-         vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-         vim.keymap.set('n', '<leader>sf', function()
-            require('telescope.builtin').find_files {
-               find_command = { 'rg', '--files', '--hidden', '--iglob', '!.git', '--iglob', '!.venv' },
-            }
-         end, { desc = '[S]earch [F]iles' })
-         vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-         vim.keymap.set('n', '<leader>sw', function()
+         local builtin = require("telescope.builtin")
+         vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
+         vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
+         vim.keymap.set("n", "<leader>sf", function()
+            require("telescope.builtin").find_files({
+               find_command = { "rg", "--files", "--hidden", "--iglob", "!.git", "--iglob", "!.venv" },
+            })
+         end, { desc = "[S]earch [F]iles" })
+         vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
+         vim.keymap.set("n", "<leader>sw", function()
             -- Include hidden files but exclude .git
-            require('telescope.builtin').grep_string {
-               find_command = { 'rg', '--files', '--hidden', '--iglob', '!.git', '--iglob', '!.venv' },
-            }
-         end, { desc = '[S]earch current [W]ord' })
-         vim.keymap.set('n', '<leader>sg', function()
-            require('telescope.builtin').live_grep {
-               find_command = { 'rg', '--files', '--hidden', '--iglob', '!.git', '--iglob', '!.venv' },
-            }
-         end, { desc = '[S]earch by [G]rep' })
-         vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-         vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-         vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-         vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+            require("telescope.builtin").grep_string({
+               find_command = { "rg", "--files", "--hidden", "--iglob", "!.git", "--iglob", "!.venv" },
+            })
+         end, { desc = "[S]earch current [W]ord" })
+         vim.keymap.set("n", "<leader>sg", function()
+            require("telescope.builtin").live_grep({
+               find_command = { "rg", "--files", "--hidden", "--iglob", "!.git", "--iglob", "!.venv" },
+            })
+         end, { desc = "[S]earch by [G]rep" })
+         vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
+         vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
+         vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+         vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 
          -- Slightly advanced example of overriding default behavior and theme
          vim.keymap.set("n", "<leader>/", function()
@@ -505,6 +505,10 @@ require("lazy").setup({
 
    { -- Collection of various small independent plugins/modules
       "echasnovski/mini.nvim",
+      event = "VeryLazy",
+      dependencies = {
+         "GCBallesteros/NotebookNavigator.nvim",
+      },
       config = function()
          -- Better Around/Inside textobjects
          --
@@ -520,6 +524,11 @@ require("lazy").setup({
          -- - sd'   - [S]urround [D]elete [']quotes
          -- - sr)'  - [S]urround [R]eplace [)] [']
          require("mini.surround").setup()
+
+         local nn = require("notebook-navigator")
+         require("mini.hipatterns").setup({
+            highlighters = { cells = nn.minihipatterns_spec },
+         })
 
          -- ... and there is more!
          --  Check out: https://github.com/echasnovski/mini.nvim
