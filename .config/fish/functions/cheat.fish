@@ -4,7 +4,6 @@ function cheat
 		curl --silent cheat.sh/$argv[1] --output $HOME/.cheat/$argv[1].txt
 	end
 	bat $HOME/.cheat/$argv[1].txt \
-		--paging=always \
-		--file-name $argv[1] \
+		--paging always \
 		--decorations never
 end
