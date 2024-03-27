@@ -41,6 +41,8 @@ set -g fish_term24bit 1
 
 set -gx BAT_THEME ansi
 
+set -gx XDG_DATA_HOME $HOME/.local/share
+
 # Rust CLI App inits
 zoxide init fish | source
 starship init fish | source
