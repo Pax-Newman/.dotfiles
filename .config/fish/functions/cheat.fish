@@ -28,11 +28,11 @@ function cheat --description 'Display a cheat sheet using cheat.sh'
 		return 1
 	end
 
-	if not test -e $HOME/.cheat/$argv[1].txt
-		mkdir -p (path dirname $HOME/.cheat/$argv[1])
-		curl --silent cheat.sh/$argv[1] --output $HOME/.cheat/$argv[1].txt
+	if not test -e $XDG_DATA_HOME/.cheat/$argv[1].txt
+		mkdir -p (path dirname $XDG_DATA_HOME/.cheat/$argv[1])
+		curl --silent cheat.sh/$argv[1] --output $XDG_DATA_HOME/.cheat/$argv[1].txt
 	end
-	bat $HOME/.cheat/$argv[1].txt \
+	bat $XDG_DATA_HOME/.cheat/$argv[1].txt \
 		--paging always \
 		--decorations never
 end
