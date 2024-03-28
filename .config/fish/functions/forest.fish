@@ -4,6 +4,12 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
       a add: Add a subtree
       u update: Update a subtree, or all subtrees if no subtree is specified
 '
+
+   if test (count $argv) -eq 0
+      echo $help
+      return 1
+   end
+
    # Parse the command options
    set --local options \
       'h/help' \
@@ -12,9 +18,13 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
    argparse $options -- $argv
 
    # Display the help message
-   if set --query _flag_help; or test (count $argv) -eq 0
+   if set --query _flag_help
       echo $help
       return 0
+   end
+
+   if not git rev-parse --is-inside-work-tree > /dev/null
+      return 1
    end
 
    # Add a subtree
