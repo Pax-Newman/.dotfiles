@@ -37,7 +37,7 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
       # Create a remote to track changes
       git remote add -f $name $_flag_add
       # Add the subtree
-      git subtree add --prefix forest/$name $_flag_add main
+      git subtree add --prefix forest/$name $_flag_add main --squash
 
       # Save the subtree to the forest file
       echo $name $flag_add main >> forest/.forest
@@ -74,6 +74,8 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
          end
          return $status
       end
-
    end
+
+
+
 end
