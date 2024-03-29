@@ -1,22 +1,28 @@
 #Pax Newman FISH Config
 
+# Commands to run in interactive sessions can go here
 if status is-interactive
-   # Commands to run in interactive sessions can go here
-   #set -U fish_greeting # comment out to disable the motd?
 
-   # default to the manga dir if there's nothing set to MOTD_DIRS
-   if test -z "$MOTD_DIRS" 
-      set -a MOTD_DIRS "manga"
-   end
-   # add all files from each dir in MOTD_DIRS
-   for dir in $MOTD_DIRS
-      set -af pics (printf "%s" ~/.config/motd_pictures/$dir/)*.*
-   end
-   # Display a random picture from $pics
-   if test -n "$ZELLIJ"
-      img2sixel (random choice $pics) --height 512
+   # Remove the default greeting
+   set -U fish_greeting
+
+   # If we have picture directories set then display a pic
+   if set --query $MOTD_DIRS
+      # add all files from each dir in MOTD_DIRS
+      for dir in $MOTD_DIRS
+         set -af pics (printf "%s" ~/.config/motd_pictures/$dir/)*.*
+      end
+      # Display a random picture from $pics
+      if test -n "$ZELLIJ"
+         img2sixel (random choice $pics) --height 512
+      else
+         itermimg (random choice $pics) --height 50%
+      end
+   # Otherwise display a text message
    else
-      itermimg (random choice $pics) --height 50%
+      # Get the weather
+      date +'%a. - %b: %d'
+      curl 'wttr.in/?format=%l\n%t+%c\nprecipitation:%20%p\n'
    end
 
    alias c='z'
