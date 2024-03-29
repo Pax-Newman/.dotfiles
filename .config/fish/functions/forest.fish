@@ -3,8 +3,7 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
       h help: Display this help message
       a add: Add a subtree
       u update: Update a subtree, or all subtrees if no subtree is specified
-      r remove: Remove a subtree
-'
+      r remove: Remove a subtree'
 
    if test (count $argv) -eq 0
       echo $help
@@ -18,6 +17,7 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
       'u/update=?' \
       'r/remove='
    argparse $options -- $argv
+   or return 1
 
    # Display the help message
    if set --query _flag_help
