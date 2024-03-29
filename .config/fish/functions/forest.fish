@@ -1,8 +1,9 @@
 function forest --description 'Wraps git-subtree in a more user-friendly interface'
-   set --local help 'usage: forest [-h] [-a add=URL] [-u update=[subtree]]
+   set --local help 'usage: forest [-h] [-a add=URL] [-u update=[subtree]] [-r remove=subtree]
       h help: Display this help message
       a add: Add a subtree
       u update: Update a subtree, or all subtrees if no subtree is specified
+      r remove: Remove a subtree
 '
 
    if test (count $argv) -eq 0
@@ -14,7 +15,8 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
    set --local options \
       'h/help' \
       'a/add=' \
-      'u/update=?'
+      'u/update=?' \
+      'r/remove='
    argparse $options -- $argv
 
    # Display the help message
@@ -23,7 +25,15 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
       return 0
    end
 
+   # Check if the current directory is a git repository
    if not git rev-parse --is-inside-work-tree > /dev/null
+      return 1
+   end
+
+   # Check for uncommitted changes
+   if git status --porcelain | grep -qv '^??'
+      echo "Uncommitted changes in the repository"
+      echo "Please commit or stash changes before running forest"
       return 1
    end
 
@@ -40,7 +50,7 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
       git subtree add --prefix forest/$name $_flag_add main --squash
 
       # Save the subtree to the forest file
-      echo $name $flag_add main >> forest/.forest
+      echo $name $_flag_add main >> forest/.forest
 
       return $status
    end
@@ -76,6 +86,28 @@ function forest --description 'Wraps git-subtree in a more user-friendly interfa
       end
    end
 
+   # Remove a subtree
+   if set --query _flag_remove
+      # Find the subtree in the forest file
+      set --local tree (cat forest/.forest | grep $_flag_remove)
 
+      if test -z $tree
+         echo "Subtree $_flag_remove not found"
+         return 1
+      else
+         echo $tree | read --function name url branch
+      end
+
+      # Remove the subtree from the forest file
+      grep -v $_flag_remove forest/.forest > forest/.forest.tmp
+      mv forest/.forest.tmp forest/.forest
+
+      # Remove subtree from repository
+      git rm -r forest/$name
+      git commit -m "Removed $name subtree"
+      git remote remove $name
+
+      return $status
+   end
 
 end
