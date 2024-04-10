@@ -3,10 +3,10 @@ return {
    {
       'zbirenbaum/copilot.lua',
       cmd = 'Copilot',
-      event = 'InsertEnter',
+      -- event = 'InsertEnter', -- Starts Copilot when entering insert mode if left uncommented
       opts = {
          suggestion = {
-            enabled = false,
+            enabled = true,
             auto_trigger = true,
             debounce = 75,
             keymap = {
