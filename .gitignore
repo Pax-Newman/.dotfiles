@@ -40,6 +40,22 @@ go/
 .ipython/
 .cache/
 .sl_cache/
+.docker/
+.ipython/
+.jupyter/
+.luarocks/
+.marimo/
+.matplotlib/
+.mono/
+.opam/
+.oracle_jre_usage/
+.prettierd/
+.thumbnails/
+.dlv/
+.cheat/
+.cups/
+.cisco/
+
 
 # ---- Config Dirs
 
