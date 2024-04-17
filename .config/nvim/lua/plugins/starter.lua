@@ -1,5 +1,4 @@
-local function header()
-   return [[
+local header = [[
 ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
 ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
 ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
@@ -7,7 +6,6 @@ local function header()
 ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
 ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 ]]
-end
 
 return {
    {
@@ -15,14 +13,25 @@ return {
       event = 'VimEnter',
       opts = function()
          local starter = require 'mini.starter'
+         local tele = require 'telescope.builtin'
          local config = {
             header = header,
             items = {
-               starter.sections.builtin_actions(),
-               -- starter.sections.recent_files(10, false),
-               starter.sections.recent_files(10, true),
+               {
+                  name = 'Get Started',
+                  action = function()
+                     require('telescope.builtin').find_files {
+                        find_command = { 'rg', '--files', '--hidden', '--iglob', '!.git', '--iglob', '!.venv' },
+                     }
+                  end,
+                  section = '',
+               },
             },
             footer = '',
+            content_hooks = {
+               starter.gen_hook.aligning('center', 'center'),
+               starter.gen_hook.adding_bullet(),
+            },
          }
          return config
       end,
