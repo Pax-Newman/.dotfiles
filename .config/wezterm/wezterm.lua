@@ -92,6 +92,10 @@ config.keys = {
       action = act.CloseCurrentPane({ confirm = true }),
    },
 
+   ---- Move between tabs
+   { key = "LeftArrow", mods = "SUPER", action = act.ActivateTabRelative(-1) },
+   { key = "RightArrow", mods = "SUPER", action = act.ActivateTabRelative(1) },
+
    ---- Change font size
    {
       key = "+",
