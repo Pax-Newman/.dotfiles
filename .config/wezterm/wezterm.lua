@@ -8,7 +8,13 @@ local act = wez.action
 config.font = wez.font("CaskaydiaCove Nerd Font")
 config.font_size = 11.0
 
+-- Set color scheme
 config.color_scheme = "rose-pine"
+
+-- Apply opacity and background blur
+config.window_background_opacity = 0.3
+config.text_background_opacity = 0.5
+config.macos_window_background_blur = 20
 
 -- Leave inactive panes at full brightness
 config.inactive_pane_hsb = {
@@ -24,6 +30,11 @@ config.window_padding = {
    top = 0,
    bottom = 0,
 }
+
+---- Functionality
+
+-- Set fish as default shell
+config.default_prog = { "/opt/homebrew/bin/fish", "-l" }
 
 ---- Keymaps
 
