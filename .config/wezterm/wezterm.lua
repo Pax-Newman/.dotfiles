@@ -36,6 +36,10 @@ config.window_padding = {
 -- Set fish as default shell
 config.default_prog = { "/opt/homebrew/bin/fish", "-l" }
 
+config.set_environment_variables = {
+   SHELL = "/opt/homebrew/bin/fish",
+}
+
 ---- Keymaps
 
 config.keys = {
