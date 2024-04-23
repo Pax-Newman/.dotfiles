@@ -1,10 +1,15 @@
 #Pax Newman FISH Config
 
+# ---- Prompt
+# tide configure --auto --style=Lean --prompt_colors='16 colors' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=No
+
 # ---- Important EnvVars
 set -gx XDG_DATA_HOME $HOME/.local/share
 
 # Commands to run in interactive sessions can go here
 if status is-interactive
+
+   set -g 
 
    # Remove the default greeting
    set -U fish_greeting
@@ -57,6 +62,7 @@ if status is-interactive
    alias dotstat='dots status'
 
    fish_config theme choose 'Rosé Pine Moon'
+
 end
 
 set -gx EDITOR nvim
@@ -68,7 +74,6 @@ set -gx BAT_THEME ansi
 
 # Rust CLI App inits
 zoxide init fish | source
-starship init fish | source
 
 # --- Path Setup ---
 
