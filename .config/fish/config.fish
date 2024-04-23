@@ -9,8 +9,6 @@ set -gx XDG_DATA_HOME $HOME/.local/share
 # Commands to run in interactive sessions can go here
 if status is-interactive
 
-   set -g 
-
    # Remove the default greeting
    set -U fish_greeting
 
