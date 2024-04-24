@@ -1,13 +1,18 @@
 #Pax Newman FISH Config
 
-# ---- Prompt
-# tide configure --auto --style=Lean --prompt_colors='16 colors' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=No
-
-# ---- Important EnvVars
+# ---- EnvVars ----
 set -gx XDG_DATA_HOME $HOME/.local/share
 
-# Commands to run in interactive sessions can go here
+set -gx EDITOR nvim
+
+set -g fish_term24bit 1
+
+set -gx BAT_THEME ansi
+
+# ---- Interactive Settings ----
 if status is-interactive
+
+   # ---- Greeting
 
    # Remove the default greeting
    set -U fish_greeting
@@ -47,6 +52,8 @@ if status is-interactive
       cat $wttr_data
    end
 
+   # ---- Aliases
+
    alias c='z'
 
    alias gs='git status'
@@ -54,37 +61,35 @@ if status is-interactive
    alias gc='git commit -m'
    alias gd='git diff'
 
-
    alias dots='/usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"'
    alias dotadd='dots add'
    alias dotstat='dots status'
 
+   # ---- Theme
+
    fish_config theme choose 'Rosé Pine Moon'
 
+   # ---- Prompt
+   # tide configure --auto --style=Lean --prompt_colors='16 colors' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=No
+
 end
-
-set -gx EDITOR nvim
-
-set -g fish_term24bit 1
-
-set -gx BAT_THEME ansi
 
 
 # Rust CLI App inits
 zoxide init fish | source
 
-# --- Path Setup ---
+# ---- Path Setup ----
 
-# -- Fish Paths
+# ---- Fish Path
 fish_add_path /Users/paxnewman/bin
 fish_add_path /Users/paxnewman/Library/Python/3.11/bin
 fish_add_path /Users/paxnewman/go/bin
 fish_add_path /opt/homebrew/bin
 
-# -- PATH
+# ---- PATH
 fish_add_path --path /Users/paxnewman/.cargo/bin
 
-# -- Fish Integrations
+# ---- Shell Integrations ----
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
