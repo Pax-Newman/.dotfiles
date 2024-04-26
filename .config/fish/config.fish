@@ -48,7 +48,7 @@ if status is-interactive
          curl --silent 'wttr.in/?format=%l\n%t+%c\nprecipitation:%20%p\n' -o $wttr_data > /dev/null
       end
 
-      date +'%a. - %b: %d'
+      date +'%A %b. %d'
       cat $wttr_data
    end
 
