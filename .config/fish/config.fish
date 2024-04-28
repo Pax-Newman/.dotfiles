@@ -18,7 +18,7 @@ if status is-interactive
    set -U fish_greeting
 
    # If we have picture directories set then display a pic
-   if set --query MOTD_DIRS
+   if not set --query NVIM; and set --query MOTD_DIRS
       # add all files from each dir in MOTD_DIRS
       for dir in $MOTD_DIRS
          set -af pics (printf "%s" ~/.config/motd_pictures/$dir/)*.*
