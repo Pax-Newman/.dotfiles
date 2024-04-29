@@ -6,7 +6,7 @@ local act = wez.action
 
 -- Font settings
 config.font = wez.font("CaskaydiaCove Nerd Font")
-config.font_size = 11.0
+config.font_size = 22.0
 
 -- Set color scheme
 config.color_scheme = "rose-pine"
@@ -36,6 +36,7 @@ config.window_padding = {
 -- Set fish as default shell
 config.default_prog = { "/opt/homebrew/bin/fish", "-l" }
 
+-- Set Environment Variables
 config.set_environment_variables = {
    SHELL = "/opt/homebrew/bin/fish",
 }
