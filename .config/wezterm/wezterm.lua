@@ -45,6 +45,10 @@ config.set_environment_variables = {
 
 config.keys = {
 
+   ---- Scroll up/down
+   { key = "UpArrow", mods = "SUPER", action = act.ScrollByPage(-0.1) },
+   { key = "DownArrow", mods = "SUPER", action = act.ScrollByPage(0.1) },
+
    ---- Move between panes
    {
       key = "l",
