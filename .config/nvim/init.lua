@@ -471,7 +471,14 @@ require('lazy').setup({
             stylua = {
                command = 'stylua',
                inherit = true,
-               prepend_args = { '--indent-type', 'Spaces', '--indent-width', '3' },
+               prepend_args = {
+                  '--indent-type',
+                  'Spaces',
+                  '--indent-width',
+                  '3',
+                  '--call-parentheses',
+                  'None',
+               },
             },
          },
       },
