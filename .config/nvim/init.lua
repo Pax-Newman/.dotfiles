@@ -416,6 +416,17 @@ require('lazy').setup({
                   },
                },
             },
+
+            html = {
+               init_options = {
+                  configurationSection = { 'html', 'css', 'javascript' },
+                  embeddedLanguages = {
+                     css = true,
+                     javascript = true,
+                  },
+                  provideFormatter = false,
+               },
+            },
          }
 
          -- Ensure the servers and tools above are installed
