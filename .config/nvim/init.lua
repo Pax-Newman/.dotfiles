@@ -572,9 +572,6 @@ require('lazy').setup({
    { -- Collection of various small independent plugins/modules
       'echasnovski/mini.nvim',
       event = 'VeryLazy',
-      dependencies = {
-         'GCBallesteros/NotebookNavigator.nvim',
-      },
       config = function()
          -- Better Around/Inside textobjects
          --
@@ -590,12 +587,6 @@ require('lazy').setup({
          -- - sd'   - [S]urround [D]elete [']quotes
          -- - sr)'  - [S]urround [R]eplace [)] [']
          require('mini.surround').setup()
-
-         local nn = require 'notebook-navigator'
-         require('mini.hipatterns').setup {
-            highlighters = { cells = nn.minihipatterns_spec },
-         }
-
          -- ... and there is more!
          --  Check out: https://github.com/echasnovski/mini.nvim
       end,

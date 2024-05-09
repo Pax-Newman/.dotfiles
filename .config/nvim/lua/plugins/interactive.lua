@@ -1,4 +1,7 @@
--- Molten.nvim
+-- Interactive Programming Plugins
+
+-- Which filetypes to enable interactivity on
+local ft = { 'python' }
 
 return {
    {
@@ -8,11 +11,14 @@ return {
       version = '^1.0.0', -- use version <2.0.0 to avoid breaking changes
       dependencies = { '3rd/image.nvim' },
       build = ':UpdateRemotePlugins',
-      init = function()
+
+      lazy = true,
+      ft = ft,
+
+      config = function()
          vim.g.molten_image_provider = 'image.nvim'
          vim.g.molten_output_win_max_height = 20
-      end,
-      config = function()
+
          vim.keymap.set('n', '<localleader>mi', ':MoltenInit<CR>', { silent = true, desc = '[M]olten [I]nit' })
          vim.keymap.set('n', '<localleader>dl', function()
             vim.cmd 'MoltenEvaluateLine'
@@ -89,7 +95,9 @@ return {
          'benlubas/molten-nvim',
          'echasnovski/mini.nvim',
       },
-      event = 'VeryLazy',
+
+      lazy = true,
+      ft = ft,
 
       config = function()
          local nn = require 'notebook-navigator'
@@ -108,6 +116,10 @@ return {
          vim.keymap.set('n', '[h', function()
             nn.move_cell 'u'
          end, { desc = 'Move [U]p a Cell' })
+
+         require('mini.hipatterns').setup {
+            highlighters = { cells = nn.minihipatterns_spec },
+         }
       end,
    },
    -- {
