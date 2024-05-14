@@ -33,7 +33,7 @@ alias dots='/usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"'
 dots checkout
 
 # Ignore untracked files to make usage a lot cleaner
-config config --local status.showUntrackedFiles no
+dots config --local status.showUntrackedFiles no
 
 # You're done!
 ```
