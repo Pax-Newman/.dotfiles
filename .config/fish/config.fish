@@ -27,7 +27,7 @@ if status is-interactive
       if test -n "$ZELLIJ"
          img2sixel (random choice $pics) --height 512
       else
-         itermimg (random choice $pics) --height 50%
+         wezterm imgcat (random choice $pics) --height 50%
       end
 
    # Otherwise display a text message with the weather
