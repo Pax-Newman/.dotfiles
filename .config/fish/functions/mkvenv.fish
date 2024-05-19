@@ -2,10 +2,11 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 	set --local help 'usage: mkvenv [-h] [-n name]
 	h help: Display this help message
 	n name: Specify a name for the venv
-	v version: Specify which version of python to use'
+	v version: Specify which version of python to use
+	i interactive: Install ipython kernel'
 	
 	# Parse the command options
-	set --local options 'h/help' 'n/name=' 'v/version='
+	set --local options 'h/help' 'n/name=' 'v/version=' 'i/interactive'
 	argparse $options -- $argv
 
 	# Display the help message
@@ -34,14 +35,14 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 	# Activate our new environment
 	source $venv_name/bin/activate.fish
 
-	# Install project dependencies
-
 	pip install --upgrade pip
 
-	# Setup venv jupyter kernel
-	pip install ipykernel
-	# Set kernel name to the basename of the repo and replace whitespace with dashes
-	python -m ipykernel install --user --name (basename $PWD | tr -s '[:blank:]' '-')
+	# Setup venv's jupyter kernel
+	if set --query _flag_interactive
+		pip install ipykernel
+		Set kernel name to the basename of the repo and replace whitespace with dashes
+		python -m ipykernel install --user --name (basename $PWD | tr -s '[:blank:]' '-')
+	end
 
 	# pip install pyright
 
