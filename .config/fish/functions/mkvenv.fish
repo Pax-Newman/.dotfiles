@@ -3,10 +3,16 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 	h help: Display this help message
 	n name: Specify a name for the venv
 	v version: Specify which version of python to use
-	i interactive: Install ipython kernel'
+	i interactive: Install ipython kernel
+	r requirements: Install a requirements.txt file'
 	
 	# Parse the command options
-	set --local options 'h/help' 'n/name=' 'v/version=' 'i/interactive'
+	set --local options \
+		'h/help' \
+		'n/name=' \
+		'v/version=' \
+		'i/interactive' \
+		'r/requirements='
 	argparse $options -- $argv
 
 	# Display the help message
@@ -44,9 +50,10 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 		python -m ipykernel install --user --name (basename $PWD | tr -s '[:blank:]' '-')
 	end
 
-	# pip install pyright
-
-	# TODO have a line here that maybe auto-installs a requirements.txt?
+	# Install requirements
+	if set --query _flag_requirements
+		pip install -r $_flag_requirements
+	end
 
 	# Configure our pyproject.toml if it doesn't already exist
 	if not test -e pyproject.toml
