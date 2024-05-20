@@ -1,66 +1,66 @@
 function mkvenv --description 'Creates a new python project with a venv and pyproject.toml. Usage: mkvenv'
-	set --local help 'usage: mkvenv [-h] [-n name]
-	h help: Display this help message
-	n name: Specify a name for the venv
-	v version: Specify which version of python to use
-	i interactive: Install ipython kernel
-	r requirements: Install a requirements.txt file'
-	
-	# Parse the command options
-	set --local options \
-		'h/help' \
-		'n/name=' \
-		'v/version=' \
-		'i/interactive' \
-		'r/requirements='
-	argparse $options -- $argv
+   set --local help 'usage: mkvenv [-h] [-n name]
+   h help: Display this help message
+   n name: Specify a name for the venv
+   v version: Specify which version of python to use
+   i interactive: Install ipython kernel
+   r requirements: Install a requirements.txt file'
 
-	# Display the help message
-	if set --query _flag_help
-		echo $help
-		return 0
-	end
+   # Parse the command options
+   set --local options \
+      'h/help' \
+      'n/name=' \
+      'v/version=' \
+      'i/interactive' \
+      'r/requirements='
+   argparse $options -- $argv
 
-	# Set the virtual env name
-	if set --query _flag_name
-		set --function venv_name $_flag_name
-	else
-		set --function venv_name '.venv'
-	end
+   # Display the help message
+   if set --query _flag_help
+      echo $help
+      return 0
+   end
 
-	# Set the python version
-	if set --query _flag_version
-		set --function python_version $_flag_version
-	else
-		set --function python_version '3'
-	end
+   # Set the virtual env name
+   if set --query _flag_name
+      set --function venv_name $_flag_name
+   else
+      set --function venv_name '.venv'
+   end
 
-	# Get local current directory name in kebab-case
-	set --function project_name (basename $PWD | tr -s '[:blank:]' '-')
+   # Set the python version
+   if set --query _flag_version
+      set --function python_version $_flag_version
+   else
+      set --function python_version '3'
+   end
 
-	# Create the virtual environment
-	env (printf "python%s" $python_version) -m venv $venv_name
+   # Get local current directory name in kebab-case
+   set --function project_name (basename $PWD | tr -s '[:blank:]' '-')
 
-	# Activate our new environment
-	source $venv_name/bin/activate.fish
+   # Create the virtual environment
+   env (printf "python%s" $python_version) -m venv $venv_name
 
-	pip install --upgrade pip
+   # Activate our new environment
+   source $venv_name/bin/activate.fish
 
-	# Setup venv's jupyter kernel
-	if set --query _flag_interactive
-		pip install ipykernel
-		Set kernel name to the basename of the repo and replace whitespace with dashes
-		python -m ipykernel install --user --name $project_name
-	end
+   pip install --upgrade pip
 
-	# Install requirements
-	if set --query _flag_requirements
-		pip install -r $_flag_requirements
-	end
+   # Setup venv's jupyter kernel
+   if set --query _flag_interactive
+      pip install ipykernel
+      Set kernel name to the basename of the repo and replace whitespace with dashes
+      python -m ipykernel install --user --name $project_name
+   end
 
-	# Configure our pyproject.toml if it doesn't already exist
-	if not test -e pyproject.toml
-		echo "
+   # Install requirements
+   if set --query _flag_requirements
+      pip install -r $_flag_requirements
+   end
+
+   # Configure our pyproject.toml if it doesn't already exist
+   if not test -e pyproject.toml
+      echo "
 [project]
 name = \"$project_name\"
 version = \"1.0.0\"
@@ -70,5 +70,5 @@ exclude = [ \"$venv_name\" ]
 venvPath = \".\"
 venv = \"$venv_name\"
 " >> pyproject.toml
-	end
+   end
 end
