@@ -35,6 +35,9 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 		set --function python_version '3'
 	end
 
+	# Get local current directory name in kebab-case
+	set --function project_name (basename $PWD | tr -s '[:blank:]' '-')
+
 	# Create the virtual environment
 	env (printf "python%s" $python_version) -m venv $venv_name
 
@@ -47,7 +50,7 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 	if set --query _flag_interactive
 		pip install ipykernel
 		Set kernel name to the basename of the repo and replace whitespace with dashes
-		python -m ipykernel install --user --name (basename $PWD | tr -s '[:blank:]' '-')
+		python -m ipykernel install --user --name $project_name
 	end
 
 	# Install requirements
@@ -58,6 +61,10 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
 	# Configure our pyproject.toml if it doesn't already exist
 	if not test -e pyproject.toml
 		echo "
+[project]
+name = \"$project_name\"
+version = \"1.0.0\"
+
 [tool.pyright]
 exclude = [ \"$venv_name\" ]
 venvPath = \".\"
