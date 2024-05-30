@@ -1,7 +1,7 @@
 -- Interactive Programming Plugins
 
 -- Which filetypes to enable interactivity on
-local ft = { 'python' }
+local ft = { 'python', 'quarto' }
 
 return {
    {
@@ -9,15 +9,18 @@ return {
       -- For information on which languages are supported see https://github.com/jupyter/jupyter/wiki/Jupyter-kernels
       'benlubas/molten-nvim',
       version = '^1.0.0', -- use version <2.0.0 to avoid breaking changes
-      dependencies = { '3rd/image.nvim' },
+      dependencies = { '3rd/image.nvim', 'willothy/wezterm.nvim' },
       build = ':UpdateRemotePlugins',
 
-      lazy = true,
       ft = ft,
 
       config = function()
          vim.g.molten_image_provider = 'image.nvim'
-         vim.g.molten_output_win_max_height = 20
+         -- vim.g.molten_image_provider = 'wezterm'
+         -- vim.g.molten_output_win_max_height = 20
+         -- vim.g.molten_split_direction = 'right'
+         -- vim.g.molten_split_size = 20
+         -- vim.g.molten_auto_open_output = false
 
          vim.keymap.set('n', '<localleader>mi', ':MoltenInit<CR>', { silent = true, desc = '[M]olten [I]nit' })
          vim.keymap.set('n', '<localleader>dl', function()
@@ -73,7 +76,7 @@ return {
       -- https://github.com/3rd/image.nvim/issues/80
       '3rd/image.nvim',
       opts = {
-         backend = 'ueberzug', -- whatever backend you would like to use
+         backend = 'kitty', -- whatever backend you would like to use
          max_width = 100,
          max_height = 12,
          max_height_window_percentage = math.huge,
@@ -81,10 +84,12 @@ return {
          window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
          window_overlap_clear_ft_ignore = { 'cmp_menu', 'cmp_docs', '' },
       },
-      config = function()
+      config = function(opts)
          -- Add luarocks 5.1 packages to the nvim package path
          package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/?/init.lua;'
          package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/?.lua;'
+
+         require('image').setup(opts)
       end,
    },
    {
@@ -96,7 +101,6 @@ return {
          'echasnovski/mini.nvim',
       },
 
-      lazy = true,
       ft = ft,
 
       config = function()
