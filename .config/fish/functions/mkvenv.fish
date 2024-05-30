@@ -49,7 +49,7 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
    # Setup venv's jupyter kernel
    if set --query _flag_interactive
       pip install ipykernel
-      Set kernel name to the basename of the repo and replace whitespace with dashes
+      # Set kernel name to the basename of the repo and replace whitespace with dashes
       python -m ipykernel install --user --name $project_name
    end
 
