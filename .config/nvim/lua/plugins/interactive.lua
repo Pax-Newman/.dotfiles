@@ -1,7 +1,7 @@
 -- Interactive Programming Plugins
 
 -- Which filetypes to enable interactivity on
-local ft = { 'python', 'quarto' }
+local ft = { 'python' }
 
 return {
    {
@@ -21,6 +21,7 @@ return {
          -- vim.g.molten_split_direction = 'right'
          -- vim.g.molten_split_size = 20
          -- vim.g.molten_auto_open_output = false
+         vim.g.molten_virt_text_max_lines = 16
 
          vim.keymap.set('n', '<localleader>mi', ':MoltenInit<CR>', { silent = true, desc = '[M]olten [I]nit' })
          vim.keymap.set('n', '<localleader>dl', function()
@@ -69,22 +70,31 @@ return {
             ':MoltenHideOutput<CR>',
             { silent = true, desc = '[M]olten [H]ide Output' }
          )
+         vim.keymap.set(
+            'n',
+            '<localleader>mv',
+            ':MoltenImagePopup<CR>',
+            { silent = true, desc = '[M]olten [V]iew Image in External Viewer' }
+         )
       end,
    },
    {
       -- NOTE: For iterm2 support you may have to adjust the plugin slightly like this issue
       -- https://github.com/3rd/image.nvim/issues/80
       '3rd/image.nvim',
+
+      lazy = true,
+
       opts = {
          backend = 'kitty', -- whatever backend you would like to use
          max_width = 100,
-         max_height = 12,
+         max_height = 20,
          max_height_window_percentage = math.huge,
          max_width_window_percentage = math.huge,
          window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
          window_overlap_clear_ft_ignore = { 'cmp_menu', 'cmp_docs', '' },
       },
-      config = function(opts)
+      config = function(_, opts)
          -- Add luarocks 5.1 packages to the nvim package path
          package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/?/init.lua;'
          package.path = package.path .. ';' .. vim.fn.expand '$HOME' .. '/.luarocks/share/lua/5.1/?.lua;'
@@ -125,6 +135,73 @@ return {
             highlighters = { cells = nn.minihipatterns_spec },
          }
       end,
+   },
+   {
+      'quarto-dev/quarto-nvim',
+
+      ft = 'quarto',
+
+      dependencies = {
+         'benlubas/molten-nvim',
+         'jmbuhr/otter.nvim',
+      },
+
+      opts = {
+         debug = false,
+         closePreviewOnExit = true,
+         lspFeatures = {
+            enabled = true,
+            chunks = 'curly',
+            languages = { 'r', 'python', 'julia', 'bash', 'html' },
+            diagnostics = {
+               enabled = true,
+               triggers = { 'BufWritePost' },
+            },
+            completion = {
+               enabled = true,
+            },
+         },
+         codeRunner = {
+            enabled = true,
+            default_method = 'molten', -- 'molten' or 'slime'
+         },
+         keymap = {
+            -- set whole section or individual keys to `false` to disable
+            hover = 'K',
+            definition = 'gd',
+            type_definition = 'gD',
+            rename = '<localleader>rn',
+            format = '<localleader>f',
+            references = 'gr',
+         },
+      },
+
+      config = function(_, opts)
+         vim.print(opts.debug)
+
+         require('quarto').setup(opts)
+
+         local runner = require 'quarto.runner'
+
+         vim.keymap.set('n', '<localleader>x', runner.run_cell, { desc = 'run cell', silent = true })
+      end,
+   },
+   -- for lsp features in code cells / embedded code
+   'jmbuhr/otter.nvim',
+   dev = false,
+   dependencies = {
+      {
+         'neovim/nvim-lspconfig',
+         'nvim-treesitter/nvim-treesitter',
+         'hrsh7th/nvim-cmp',
+      },
+   },
+   opts = {
+      buffers = {
+         set_filetype = true,
+         write_to_disk = false,
+      },
+      handle_leading_whitespace = true,
    },
    -- {
    --    'Vigemus/iron.nvim',
