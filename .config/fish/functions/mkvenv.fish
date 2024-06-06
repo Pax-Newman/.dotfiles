@@ -24,8 +24,10 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
    # Set the virtual env name
    if set --query _flag_name
       set --function venv_name $_flag_name
+      set --function project_name $_flag_name
    else
       set --function venv_name '.venv'
+      set --function project_name (basename $PWD | tr -s '[:blank:]' '-')
    end
 
    # Set the python version
@@ -36,7 +38,6 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
    end
 
    # Get local current directory name in kebab-case
-   set --function project_name (basename $PWD | tr -s '[:blank:]' '-')
 
    # Create the virtual environment
    env (printf "python%s" $python_version) -m venv $venv_name
@@ -67,7 +68,7 @@ version = \"1.0.0\"
 
 [tool.pyright]
 exclude = [ \"$venv_name\" ]
-venvPath = \".\"
+venvPath = \"$(path normalize (pwd)/$venv_name)\"
 venv = \"$venv_name\"
 " >> pyproject.toml
    end
