@@ -40,36 +40,23 @@ function mkvenv --description 'Creates a new python project with a venv and pypr
    # Get local current directory name in kebab-case
 
    # Create the virtual environment
-   env (printf "python%s" $python_version) -m venv $venv_name
+   uv venv --python $python_version $venv_name
 
    # Activate our new environment
    source $venv_name/bin/activate.fish
 
-   pip install --upgrade pip
+   # Check for update
+   # pip install --upgrade pip
 
    # Setup venv's jupyter kernel
    if set --query _flag_interactive
-      pip install ipykernel
+      uv pip install ipykernel
       # Set kernel name to the basename of the repo and replace whitespace with dashes
       python -m ipykernel install --user --name $project_name
    end
 
    # Install requirements
    if set --query _flag_requirements
-      pip install -r $_flag_requirements
-   end
-
-   # Configure our pyproject.toml if it doesn't already exist
-   if not test -e pyproject.toml
-      echo "
-[project]
-name = \"$project_name\"
-version = \"1.0.0\"
-
-[tool.pyright]
-exclude = [ \"$venv_name\" ]
-venvPath = \"$(path normalize (pwd)/$venv_name)\"
-venv = \"$venv_name\"
-" >> pyproject.toml
+      uv pip sync $_flag_requirements
    end
 end
