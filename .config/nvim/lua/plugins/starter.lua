@@ -13,7 +13,6 @@ return {
       event = 'VimEnter',
       opts = function()
          local starter = require 'mini.starter'
-         local tele = require 'telescope.builtin'
          local config = {
             header = header,
             items = {
