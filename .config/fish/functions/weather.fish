@@ -1,5 +1,5 @@
 function weather
-   set -f wttr_data $XDG_DATA_HOME/weather/data
+   set -l wttr_data $XDG_DATA_HOME/weather/data
 
    function __fetch
       curl \
@@ -9,6 +9,7 @@ function weather
    end
 
    if not test -e $wttr_data
+      echo "Heyo"
       mkdir -p $XDG_DATA_HOME/weather/
       __fetch
    end
