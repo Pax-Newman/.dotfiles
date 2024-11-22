@@ -1,5 +1,5 @@
 function weather
-   set -g wttr_data $XDG_DATA_HOME/weather/data
+   set -f wttr_data $XDG_DATA_HOME/weather/data
 
    function __fetch
       curl \
@@ -22,7 +22,4 @@ function weather
 
    date +'%A %b. %d'
    cat $wttr_data
-
-   # Cleanup
-   set -e wttr_data
 end
