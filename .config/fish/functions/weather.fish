@@ -9,7 +9,6 @@ function weather
    end
 
    if not test -e $wttr_data
-      echo "Heyo"
       mkdir -p $XDG_DATA_HOME/weather/
       __fetch
    end
