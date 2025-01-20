@@ -5,7 +5,7 @@ function slideshow
 
    while true
       clear
-      itermimg --width 100% (random choice $pics)
+      wezterm imgcat --width 100% (random choice $pics)
       sleep (math $argv[1] \* 60)
    end
 end
