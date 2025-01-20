@@ -41,7 +41,7 @@ if status is-interactive
 
    alias gs='git status'
    alias ga='git add'
-   alias gc='git commit -m'
+   alias gc='git commit'
    alias gd='git diff'
 
    alias dots='/usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"'
