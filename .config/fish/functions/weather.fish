@@ -1,5 +1,5 @@
 function weather
-   set -l wttr_data $XDG_DATA_HOME/weather/data
+   set -fx wttr_data $XDG_DATA_HOME/weather/data
 
    function __fetch
       curl \
