@@ -1,3 +1,7 @@
+-- [[ Add Mise to PATH ]]
+
+vim.env.PATH = vim.env.HOME .. '/.local/share/mise/shims:' .. vim.env.PATH
+
 -- [[ Load Options ]]
 
 require 'settings.options'
