@@ -1,13 +1,15 @@
 #Pax Newman FISH Config
 
 # ---- EnvVars ----
-set -gx XDG_DATA_HOME $HOME/.local/share
+set -gx XDG_DATA_HOME {$HOME}/.local/share
+set -gx XDG_CONFIG_HOME {$HOME}/.config
 
 set -gx EDITOR nvim
 
 set -g fish_term24bit 1
 
 set -gx BAT_THEME ansi
+
 
 # ---- Interactive Settings ----
 if status is-interactive
@@ -60,6 +62,14 @@ end
 
 # Rust CLI App inits
 zoxide init fish | source
+
+fish_add_path /Users/s013259/.local/bin/
+
+if status is-interactive
+  mise activate fish | source
+else
+  mise activate fish --shims | source
+end
 
 # ---- Path Setup ----
 
