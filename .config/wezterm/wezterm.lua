@@ -1,15 +1,16 @@
-local wez = require("wezterm")
+local wez = require "wezterm"
 local config = wez.config_builder()
 local act = wez.action
 
 ---- Layout and Aesthetics
 
 -- Font settings
-config.font = wez.font("CaskaydiaCove Nerd Font")
+config.font = wez.font "CaskaydiaCove Nerd Font"
 config.font_size = 22.0
 
 -- Set color scheme
 config.color_scheme = "rose-pine"
+-- config.color_scheme = "Everforest Dark Soft (Gogh)"
 
 -- Apply opacity and background blur
 config.window_background_opacity = 0.3
@@ -53,63 +54,63 @@ config.keys = {
    {
       key = "l",
       mods = "SUPER",
-      action = act.ActivatePaneDirection("Right"),
+      action = act.ActivatePaneDirection "Right",
    },
    {
       key = "h",
       mods = "SUPER",
-      action = act.ActivatePaneDirection("Left"),
+      action = act.ActivatePaneDirection "Left",
    },
    {
       key = "k",
       mods = "SUPER",
-      action = act.ActivatePaneDirection("Up"),
+      action = act.ActivatePaneDirection "Up",
    },
    {
       key = "j",
       mods = "SUPER",
-      action = act.ActivatePaneDirection("Down"),
+      action = act.ActivatePaneDirection "Down",
    },
 
    ---- Resize panes
    {
       key = "H",
       mods = "SUPER",
-      action = act.AdjustPaneSize({ "Left", 3 }),
+      action = act.AdjustPaneSize { "Left", 3 },
    },
    {
       key = "J",
       mods = "SUPER",
-      action = act.AdjustPaneSize({ "Down", 3 }),
+      action = act.AdjustPaneSize { "Down", 3 },
    },
    {
       key = "K",
       mods = "SUPER",
-      action = act.AdjustPaneSize({ "Up", 3 }),
+      action = act.AdjustPaneSize { "Up", 3 },
    },
    {
       key = "L",
       mods = "SUPER",
-      action = act.AdjustPaneSize({ "Right", 3 }),
+      action = act.AdjustPaneSize { "Right", 3 },
    },
 
    ---- Split panes
    {
       key = "\\",
       mods = "SUPER",
-      action = act.SplitHorizontal({}),
+      action = act.SplitHorizontal {},
    },
    {
       key = "-",
       mods = "SUPER",
-      action = act.SplitVertical({}),
+      action = act.SplitVertical {},
    },
 
    ---- Close pane
    {
       key = "w",
       mods = "SUPER",
-      action = act.CloseCurrentPane({ confirm = true }),
+      action = act.CloseCurrentPane { confirm = true },
    },
 
    ---- Move between tabs
