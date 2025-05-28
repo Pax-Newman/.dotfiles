@@ -63,7 +63,7 @@ end
 # Rust CLI App inits
 zoxide init fish | source
 
-fish_add_path /Users/s013259/.local/bin/
+fish_add_path ~/.local/bin/
 
 if status is-interactive
   mise activate fish | source
