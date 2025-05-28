@@ -314,6 +314,7 @@ require('lazy').setup({
             lua = { 'stylua' },
             json = { 'jq' },
             swift = { 'swift_format' },
+            -- gdscript = { 'gdformat' },
             -- Conform can also run multiple formatters sequentially
             -- python = { "isort", "black" },
             --
