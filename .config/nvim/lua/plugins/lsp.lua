@@ -203,6 +203,36 @@ return {
                },
             },
 
+            luau_lsp = {
+               cmd = (function()
+                  local cmd = { 'luau-lsp', 'lsp' }
+
+                  local definition_files = vim.fn.glob('~/.lune/.typedefs/0.9.3/*', nil, true)
+
+                  for _, file in pairs(definition_files) do
+                     table.insert(cmd, '--definitions')
+                     table.insert(cmd, file)
+                  end
+
+                  return cmd
+               end)(),
+               settings = {
+                  ['luau-lsp'] = {
+                     require = {
+                        mode = 'relativeToFile',
+                        directoryAliases = {
+                           ['@lune/'] = '~/.lune/.typedefs/0.9.3/',
+                        },
+                     },
+                     types = {
+                        definitionFiles = {
+                           '~/.lune/.typedefs/0.9.3/fs.luau',
+                        },
+                     },
+                  },
+               },
+            },
+
             -- sourcekit = {
             --    capabilities = {
             --       workspace = {
@@ -259,27 +289,5 @@ return {
             on_attach = function(_, bufnr) end,
          }
       end,
-   },
-
-   {
-      'lopi-py/luau-lsp.nvim',
-      opts = {
-         server = {
-            settings = {
-               ['luau-lsp'] = {
-                  require = {
-                     mode = 'relativeToFile',
-                     directoryAliases = {
-                        ['@lune/'] = '~/.lune/.typedefs/8.5.0/',
-                     },
-                  },
-               },
-            },
-         },
-      },
-      dependencies = {
-         'nvim-lua/plenary.nvim',
-         'neovim/nvim-lspconfig',
-      },
    },
 }
