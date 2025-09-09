@@ -31,4 +31,26 @@ return {
          },
       },
    },
+
+   {
+      'olimorris/codecompanion.nvim',
+      opts = {
+         -- strategies = {
+         --
+         -- },
+         -- adapters = {
+         --
+         -- },
+      },
+      dependencies = {
+         'nvim-lua/plenary.nvim',
+         'nvim-treesitter/nvim-treesitter',
+      },
+      keys = {
+         { '<leader>ac', '<cmd>CodeCompanionChat<CR>i', '[A]I [C]hat' },
+         { '<leader>ai', '<cmd>CodeCompanion<CR>', 'Use [A]I [I]nline' },
+         { '<leader>ai', '<cmd>CodeCompanion<CR>', 'Use [A]I [I]nline', mode = 'v' },
+         { '<leader>sa', '<cmd>CodeCompanionActions<CR>', '[S]earch [A]I actions' },
+      },
+   },
 }
