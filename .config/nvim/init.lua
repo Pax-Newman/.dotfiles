@@ -158,6 +158,19 @@ require('lazy').setup({
       },
    },
 
+   {
+      'kawre/leetcode.nvim',
+      -- cmd = 'Leetcode',
+      -- build = ':TSUpdate html',
+      dependencies = {
+         'nvim-lua/plenary.nvim',
+         'MunifTanjim/nui.nvim',
+      },
+      opts = {
+         lang = 'python3',
+      },
+   },
+
    -- NOTE: Plugins can specify dependencies.
    --
    -- The dependencies are proper plugin specifications as well - anything
@@ -316,7 +329,7 @@ require('lazy').setup({
             swift = { 'swift_format' },
             -- gdscript = { 'gdformat' },
             -- Conform can also run multiple formatters sequentially
-            -- python = { "isort", "black" },
+            python = { 'ruff_format' },
             --
             -- You can use a sub-list to tell conform to run *until* a formatter
             -- is found.
@@ -336,6 +349,7 @@ require('lazy').setup({
                   'None',
                },
             },
+            ruff = { command = 'ruff', args = { 'format', '$FILENAME' } },
          },
       },
       config = function(self, opts)
