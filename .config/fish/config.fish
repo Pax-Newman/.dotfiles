@@ -59,18 +59,6 @@ if status is-interactive
 
 end
 
-
-# Rust CLI App inits
-zoxide init fish | source
-
-fish_add_path ~/.local/bin/
-
-if status is-interactive
-  mise activate fish | source
-else
-  mise activate fish --shims | source
-end
-
 # ---- Path Setup ----
 
 # ---- Fish Path
@@ -78,11 +66,14 @@ fish_add_path /Users/paxnewman/bin
 fish_add_path /Users/paxnewman/Library/Python/3.11/bin
 fish_add_path /Users/paxnewman/go/bin
 fish_add_path /opt/homebrew/bin
+fish_add_path ~/.local/bin/
 
 # ---- PATH
 fish_add_path --path /Users/paxnewman/.cargo/bin
 
 # ---- Shell Integrations ----
 
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+zoxide init fish | source
+
+# test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
