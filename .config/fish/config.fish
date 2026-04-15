@@ -33,8 +33,8 @@ if status is-interactive
       end
 
    # Otherwise display a text message with the weather
-   else
-      weather
+   # else
+   #    weather
    end
 
    # ---- Aliases
@@ -74,6 +74,10 @@ fish_add_path --path /Users/paxnewman/.cargo/bin
 # ---- Shell Integrations ----
 
 zoxide init fish | source
+starship init fish | source
 
 # test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
+
+# uv
+fish_add_path "/Users/paxnewman/.local/share/../bin"
