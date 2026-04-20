@@ -1,45 +1,47 @@
+pack = vim.pack
+
+-- pack.add "https://github.com/rose-pine/neovim"
+
 return {
-   { -- You can easily change to a different colorscheme.
-      -- Change the name of the colorscheme plugin below, and then
-      -- change the command in the config to whatever the name of that colorscheme is
-      --
-      -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
-      'rose-pine/neovim',
-      lazy = false, -- make sure we load this during startup if it is your main colorscheme
-      priority = 1000, -- make sure to load this before all the other start plugins
-      variant = 'moon',
-      name = 'rose-pine',
-   },
-
    {
-      'everviolet/nvim',
-      name = 'evergarden',
-      priority = 1000, -- Colorscheme plugin is loaded first before any other plugins
-      opts = {
-         theme = {
-            variant = 'winter', -- 'winter'|'fall'|'spring'|'summer'
-            accent = 'green',
-         },
-         editor = {
-            transparent_background = true,
-            sign = { color = 'none' },
-            float = {
-               color = 'mantle',
-               invert_border = false,
-            },
-            completion = {
-               color = 'surface0',
-            },
-         },
-      },
+      "https://codeberg.org/evergarden/nvim.git",
+      name = "evergarden",
       config = function()
-         -- Load the colorscheme here.
-         -- Like many other themes, this one has different styles, and you could load
-         -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-         vim.cmd.colorscheme 'evergarden'
-
-         -- You can configure highlights by doing something like
-         vim.cmd.hi 'Comment gui=none'
+         require("evergarden").setup {
+            theme = {
+               variant = "winter", -- 'winter'|'fall'|'spring'|'summer'
+               accent = "green",
+            },
+            editor = {
+               transparent_background = true,
+               sign = { color = "none" },
+               float = {
+                  color = "mantle",
+                  invert_border = false,
+               },
+               completion = {
+                  color = "surface0",
+               },
+            },
+         }
+      end,
+   },
+   {
+      "https://github.com/rose-pine/neovim",
+      config = function()
+         require("rose-pine").setup {
+            variant = "moon", -- 'auto'|'main'|'moon'|'dawn'
+         }
+      end,
+   },
+   {
+      "https://github.com/ember-theme/nvim",
+      name = "ember",
+      config = function()
+         require("ember").setup {
+            variant = "ember", -- "ember" | "ember-soft" | "ember-light"
+         }
+         vim.cmd "colorscheme ember"
       end,
    },
 }
