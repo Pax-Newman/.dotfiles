@@ -140,7 +140,7 @@ return {
          vim.notify("Attempting to build telescope-fzf at: " .. data.path)
          local res = vim.system({ "make" }, { cwd = data.path }):wait()
          if res.code ~= 0 then
-            vim.notify("Build failed with code " .. code .. " and err " .. res.stderr)
+            vim.notify("Build failed with code " .. res.code .. " and err " .. res.stderr)
          end
       end,
    },

@@ -43,8 +43,8 @@ return {
          local keys = {
             { "n", "<leader>ac", "<cmd>CodeCompanionChat<CR>i", "[A]I [C]hat" },
             { "n", "<leader>ai", "<cmd>CodeCompanion<CR>", "Use [A]I [I]nline" },
-            { "n", "<leader>ai", "<cmd>CodeCompanion<CR>", "Use [A]I [I]nline" },
             { "n", "<leader>sa", "<cmd>CodeCompanionActions<CR>", "[S]earch [A]I actions" },
+            -- TODO: Create a command for sending a function and all of its callsites to the AI
          }
 
          for _, keymap in ipairs(keys) do

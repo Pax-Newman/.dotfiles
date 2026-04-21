@@ -24,8 +24,7 @@ local config = {
       {
          name = "Chat",
          action = function()
-            -- TODO: Check if there's a way to open a fullscreen chat
-            vim.cmd "CodeCompanionChat"
+            require("codecompanion").chat { window_opts = { layout = "buffer" } }
          end,
          section = "",
       },
