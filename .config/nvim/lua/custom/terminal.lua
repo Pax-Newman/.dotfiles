@@ -91,8 +91,8 @@ M.create_window = function(buffer)
    local max_height = vim.o.lines
    local max_width = vim.o.columns
 
-   local height = math.floor(max_height * 0.5)
-   local width = math.floor(max_width * 0.5)
+   local height = math.floor(max_height * 0.7)
+   local width = math.floor(max_width * 0.8)
 
    local win_buf = buffer or vim.api.nvim_create_buf(false, true)
 

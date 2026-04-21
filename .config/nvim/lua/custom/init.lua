@@ -12,5 +12,10 @@ require("custom.terminal").setup()
 
 vim.keymap.set("n", "<C-i>", function()
    local term = require "custom.terminal"
-   term.open_terminal "Main"
-end)
+   local term_data = term.open_terminal "Main"
+
+   -- TODO: Find a way to map <Tab> and <C-i> so they're not the same key
+   vim.keymap.set("t", "<C-i>", function()
+      term.hide_terminal(term_data)
+   end, { buf = term_data.buffer, desc = "Hide floating terminal" })
+end, { desc = "Open floating terminal" })
