@@ -337,6 +337,13 @@ return {
                      "None",
                   },
                },
+               jq = {
+                  command = "jq",
+                  append_args = {
+                     "--indent",
+                     "2",
+                  },
+               },
             },
          }
       end,
