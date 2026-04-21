@@ -38,7 +38,27 @@ return {
       -- "nvim-lua/plenary.nvim",
       -- "nvim-treesitter/nvim-treesitter",
       config = function()
-         require("codecompanion").setup()
+         require("codecompanion").setup {
+            adapters = {
+               http = {
+                  llama_barn = function()
+                     return require("codecompanion.adapters").extend("openai_compatible", {
+                        formatted_name = "Llama Barn",
+                        env = {
+                           url = "http://localhost:2276",
+                           api_key = "llama-barn",
+                           chat_url = "/v1/chat/completions",
+                        },
+                        schema = {
+                           model = {
+                              default = "ggml-org/gemma-4-E4B-it-GGUF:Q8_0",
+                           },
+                        },
+                     })
+                  end,
+               },
+            },
+         }
 
          local keys = {
             { "n", "<leader>ac", "<cmd>CodeCompanionChat<CR>i", "[A]I [C]hat" },

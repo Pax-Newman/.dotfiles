@@ -110,9 +110,9 @@ vim.cmd.colorscheme "evergarden"
 
 load_plugins(require "plugins.ui")
 
-load_plugins(require "plugins.ai")
-
 load_plugins(require "plugins.completion")
+
+load_plugins(require "plugins.ai")
 
 load_plugins(require "plugins.lsp")
 
