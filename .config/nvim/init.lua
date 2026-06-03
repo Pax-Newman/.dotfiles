@@ -8,9 +8,6 @@ vim.loader.enable()
 -- [[ Load Options ]]
 require "settings.options"
 
--- [[ Load LSP Config ]]
-require "settings.lsp"
-
 -- [[ Load Autocommands ]]
 require "settings.autocommands"
 
@@ -115,6 +112,9 @@ load_plugins(require "plugins.completion")
 load_plugins(require "plugins.ai")
 
 load_plugins(require "plugins.lsp")
+
+-- [[ Load LSP Config ]]
+require "settings.lsp"
 
 -- [[ Load Custom Plugins and Code ]]
 

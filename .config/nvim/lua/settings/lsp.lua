@@ -65,6 +65,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
    end,
 })
 
+-- [[ Install Default LSPs ]]
+
+require("mason-lspconfig").setup {
+   ensure_installed = { "lua_ls", "pyrefly", "ruff" },
+}
+
 -- [[ Enable LSPs ]]
 
 -- Search nvim/lsp/ for lsp config files
@@ -76,6 +82,6 @@ end
 
 vim.lsp.enable(lsp_configs)
 
--- [[ Config general LSP settings ]]
+-- [[ Configure general LSP settings ]]
 
 vim.diagnostic.config { virtual_text = true }

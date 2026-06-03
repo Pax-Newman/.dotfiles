@@ -1,4 +1,4 @@
----Connects to the Godot LSP
+---Connects to the Godot LSP and establishes a link to the editor
 ---@param dispatchers vim.lsp.rpc.Dispatchers
 ---@param config vim.lsp.ClientConfig
 ---@return vim.lsp.rpc.PublicClient
@@ -18,6 +18,4 @@ end
 ---@type vim.lsp.Config
 return {
    cmd = start_server,
-   filetypes = { "gdscript" },
-   root_markers = { "project.godot", ".git" },
 }
