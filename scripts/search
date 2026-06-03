@@ -1,0 +1,111 @@
+#!/usr/bin/env -S uv --quiet run --script
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "ddgs>=9.12.1",
+# ]
+# ///
+
+import argparse
+import json
+import sys
+from enum import StrEnum
+from typing import assert_never
+
+from ddgs import DDGS
+from ddgs.engines import ENGINES
+from ddgs.exceptions import DDGSException
+
+
+class Category(StrEnum):
+    TEXT = "text"
+    IMAGES = "images"
+    NEWS = "news"
+    BOOKS = "books"
+    # VIDEOS = "videos"
+
+
+class SafeSearch(StrEnum):
+    OFF = "off"
+    MODERATE = "moderate"
+    ON = "on"
+
+
+class ExtractFormat(StrEnum):
+    MARKDOWN = "text_markdown"
+    PLAIN = "text_plain"
+    RICH = "text_rich"
+    TEXT = "text"
+    BYTES = "content"
+
+
+class Format(StrEnum):
+    MARKDOWN = "markdown"
+    JSON = "json"
+
+
+def main(argv: list[str]):
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("query", type=str)
+    parser.add_argument(
+        "--category",
+        "-c",
+        type=Category,
+        choices=Category._member_map_.values(),
+        default=Category.TEXT,
+        help="",
+    )
+    parser.add_argument(
+        "--safesearch",
+        "-s",
+        type=SafeSearch,
+        choices=SafeSearch._member_map_.values(),
+        default=SafeSearch.OFF,
+    )
+    parser.add_argument("--backend", "-b", type=str, default="auto")
+    parser.add_argument("--extract", "-e", type=ExtractFormat)
+    parser.add_argument(
+        "--format",
+        "-f",
+        type=Format,
+        choices=Category._member_map_.values(),
+        default=Format.JSON,
+    )
+
+    args = parser.parse_args(argv)
+
+    if args.backend != "auto" and args.backend not in ENGINES[args.category].keys():
+        raise ValueError(
+            f"The backend `{args.backend}` is not compatible with the category `{args.category}`. Valid backends are: [{','.join(ENGINES[args.category])}]"
+        )
+
+    try:
+        results = DDGS()._search(
+            category=args.category,
+            query=args.query,
+            region="us-en",
+            safesearch="moderate",
+            timelimit=None,
+            max_results=10,
+            page=1,
+            backend="auto",
+        )
+    except DDGSException as e:
+        sys.stderr.write(str(e))
+        exit(1)
+
+    if args.format is Format.JSON:
+        output = json.dumps(results)
+    elif args.format is Format.MARKDOWN:
+        output = ""
+    else:
+        assert_never(f"The member of Format {args.format} was not accounted for")
+
+    sys.stdout.write(output)
+
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+
+    main(args)
