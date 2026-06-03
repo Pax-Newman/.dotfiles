@@ -1,7 +1,3 @@
-pack = vim.pack
-
--- pack.add "https://github.com/rose-pine/neovim"
-
 return {
    {
       "https://codeberg.org/evergarden/nvim.git",
@@ -32,6 +28,12 @@ return {
          require("rose-pine").setup {
             variant = "moon", -- 'auto'|'main'|'moon'|'dawn'
          }
+      end,
+   },
+   {
+      "https://github.com/ramojus/mellifluous.nvim",
+      config = function()
+         require("mellifluous").setup {}
       end,
    },
    {
