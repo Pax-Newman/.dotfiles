@@ -66,7 +66,7 @@ fish_add_path /Users/paxnewman/bin
 fish_add_path /Users/paxnewman/Library/Python/3.11/bin
 fish_add_path /Users/paxnewman/go/bin
 fish_add_path /opt/homebrew/bin
-fish_add_path ~/.local/bin/
+fish_add_path ~/.local/bin
 
 # ---- PATH
 fish_add_path --path /Users/paxnewman/.cargo/bin
@@ -75,9 +75,9 @@ fish_add_path --path /Users/paxnewman/.cargo/bin
 
 zoxide init fish | source
 starship init fish | source
+mise activate fish | source
 
 # test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
-
 
 # uv
 fish_add_path "/Users/paxnewman/.local/share/../bin"
