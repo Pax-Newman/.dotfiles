@@ -321,8 +321,8 @@ return {
                swift = { "swift_format" },
                gdscript = { "gdscript-formatter" },
                python = { "ruff_format" },
-               -- You can use a sub-list to tell conform to run *until* a formatter is found.
-               javascript = { { "prettierd", "prettier" } },
+               roc = { "roc" },
+               javascript = { "prettierd" },
             },
             formatters = {
                stylua = {
@@ -343,6 +343,10 @@ return {
                      "--indent",
                      "2",
                   },
+               },
+               roc = {
+                  command = "roc",
+                  prepend_args = { "fmt" },
                },
             },
          }
