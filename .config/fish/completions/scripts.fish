@@ -1,4 +1,4 @@
-set -l available_scripts (find ~/scripts/ -perm +111 -type f -or -type l -maxdepth 1 | sed 's_^.*/scripts/__g')
+set -l available_scripts (find ~/scripts/ -perm +111 -type f -or -type l -maxdepth 1 | sed 's:^.*/scripts/::g')
 
 complete -c scripts -f
 complete -c scripts -n \

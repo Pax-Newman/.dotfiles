@@ -22,5 +22,11 @@ function scripts \
       return 0
    end
 
-   ~/scripts/$argv[1] $argv[2..-1]
+   set --local available_scripts (find ~/scripts/ -perm +111 -type f -or -type l -maxdepth 1 | sed 's:^.*/scripts/::g')
+
+   if contains $argv[1] $available_scripts
+      ~/scripts/$argv[1] $argv[2..-1]
+   else
+      echo "No known script with the name `$argv[1]`"
+   end
 end
