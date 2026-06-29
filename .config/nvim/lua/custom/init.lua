@@ -19,3 +19,6 @@ vim.keymap.set("n", "<C-i>", function()
       term.hide_terminal(term_data)
    end, { buf = term_data.buffer, desc = "Hide floating terminal" })
 end, { desc = "Open floating terminal" })
+
+-- [[ Creates a number of custom user commands ]]
+require "custom.commands"
