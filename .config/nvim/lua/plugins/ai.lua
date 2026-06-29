@@ -41,20 +41,66 @@ return {
          require("codecompanion").setup {
             adapters = {
                http = {
-                  llama_barn = function()
+                  llama = function()
                      return require("codecompanion.adapters").extend("openai_compatible", {
-                        formatted_name = "Llama Barn",
+                        formatted_name = "Llama",
                         env = {
-                           url = "http://localhost:2276",
-                           api_key = "llama-barn",
+                           url = "http://localhost:8080",
+                           api_key = "llama",
                            chat_url = "/v1/chat/completions",
                         },
                         schema = {
                            model = {
-                              default = "ggml-org/gemma-4-E4B-it-GGUF:Q8_0",
+                              default = "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_S",
                            },
                         },
                      })
+                  end,
+               },
+               acp = {
+                  maki = function()
+                     local helpers = require "codecompanion.adapters.acp.helpers"
+                     return {
+                        name = "maki",
+                        formatted_name = "Maki",
+                        type = "acp",
+                        roles = {
+                           llm = "assistant",
+                           user = "user",
+                        },
+                        commands = {
+                           default = {
+                              "maki",
+                              "acp",
+                           },
+                        },
+                        defaults = {
+                           mcpServers = {},
+                           timeout = 20000, -- 20 seconds
+                        },
+                        parameters = {
+                           protocolVersion = 1,
+                           clientCapabilities = {
+                              fs = { readTextFile = true, writeTextFile = true },
+                           },
+                           clientInfo = {
+                              name = "CodeCompanion.nvim",
+                              version = "1.0.0",
+                           },
+                        },
+                        handlers = {
+                           setup = function(self)
+                              return true
+                           end,
+                           auth = function(self)
+                              return true
+                           end,
+                           form_messages = function(self, messages, capabilities)
+                              return helpers.form_messages(self, messages, capabilities)
+                           end,
+                           on_exit = function(self, code) end,
+                        },
+                     }
                   end,
                },
             },
