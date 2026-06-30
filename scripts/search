@@ -69,7 +69,7 @@ def main(argv: list[str]):
         "--format",
         "-f",
         type=Format,
-        choices=Category._member_map_.values(),
+        choices=Format._member_map_.values(),
         default=Format.JSON,
     )
 
@@ -80,12 +80,21 @@ def main(argv: list[str]):
             f"The backend `{args.backend}` is not compatible with the category `{args.category}`. Valid backends are: [{','.join(ENGINES[args.category])}]"
         )
 
+    d = DDGS()
+    # Map category to the corresponding DDGS method
+    category_method = {
+        Category.TEXT: d.text,
+        Category.IMAGES: d.images,
+        Category.NEWS: d.news,
+        Category.BOOKS: d.books,
+    }
+    ddgs_method = category_method[args.category]
+
     try:
-        results = DDGS()._search(
-            category=args.category,
+        results = ddgs_method(
             query=args.query,
             region="us-en",
-            safesearch="moderate",
+            safesearch=args.safesearch,
             timelimit=None,
             max_results=10,
             page=1,
