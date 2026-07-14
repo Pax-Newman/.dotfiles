@@ -7,6 +7,7 @@ local function start_server(dispatchers, config)
    -- This allows the editor to send commands to Neovim
    local is_server_running = vim.uv.fs_stat(config.root_dir .. "/server.pipe")
    if not is_server_running then
+      vim.notify "Starting server pipe"
       vim.fn.serverstart(config.root_dir .. "/server.pipe")
    end
 
@@ -17,5 +18,6 @@ end
 
 ---@type vim.lsp.Config
 return {
+   filetypes = { "gdscript" },
    cmd = start_server,
 }

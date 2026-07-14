@@ -73,13 +73,15 @@ require("mason-lspconfig").setup {
 
 -- [[ Enable LSPs ]]
 
--- Search nvim/lsp/ for lsp config files
+-- Search nvim/after/lsp/ for lsp config files
+-- We use after/lsp/ in order to ensure our config overrides that of `nvim-lspconfig`
 local lsp_configs = {}
-for _, f in pairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
+for _, f in pairs(vim.api.nvim_get_runtime_file("after/lsp/*.lua", true)) do
    local server_name = vim.fn.fnamemodify(f, ":t:r")
    table.insert(lsp_configs, server_name)
 end
 
+-- Enable an LSP if it has a file in after/lsp/
 vim.lsp.enable(lsp_configs)
 
 -- [[ Configure general LSP settings ]]
