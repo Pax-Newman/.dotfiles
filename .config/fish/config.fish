@@ -29,12 +29,12 @@ if status is-interactive
       if test -n "$ZELLIJ"
          img2sixel (random choice $pics) --height 512
       else
-         wezterm imgcat (random choice $pics) --height 50%
+         chafa (random choice $pics) --scale 0.5
       end
 
    # Otherwise display a text message with the weather
-   # else
-   #    weather
+   else
+      weather
    end
 
    # ---- Aliases
@@ -52,7 +52,7 @@ if status is-interactive
 
    # ---- Theme
 
-   fish_config theme choose 'Rosé Pine Moon'
+   # fish_config theme choose 'Rosé Pine Moon'
 
    # ---- Prompt
    # tide configure --auto --style=Lean --prompt_colors='16 colors' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Few icons' --transient=No
