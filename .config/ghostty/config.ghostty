@@ -18,12 +18,11 @@ background-opacity-cells = true
 
 # Functionality
 
-# Set fish as default shell
-command = /opt/homebrew/bin/fish -l
-# command-args = "-l"
-
 # Set Environment Variables
 env = SHELL=/opt/homebrew/bin/fish
+
+# Set fish as default shell
+command = /opt/homebrew/bin/fish
 
 # Keymaps
 
@@ -57,5 +56,5 @@ keybind = super+right=next_tab
 keybind = global:cmd+backquote=toggle_quick_terminal
 
 # Change font size
-keybind = super+shift++=increase_font_size
-keybind = super+shift+-=decrease_font_size
+# keybind = super+shift++=increase_font_size
+# keybind = super+shift+-=decrease_font_size

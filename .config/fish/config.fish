@@ -5,6 +5,7 @@ set -gx XDG_DATA_HOME {$HOME}/.local/share
 set -gx XDG_CONFIG_HOME {$HOME}/.config
 
 set -gx EDITOR nvim
+set -gx SHELL /opt/homebrew/bin/fish
 
 set -g fish_term24bit 1
 
