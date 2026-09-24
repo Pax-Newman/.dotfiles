@@ -1,0 +1,61 @@
+# Layout and Aesthetics
+
+# Font settings
+font-family = "CaskaydiaCove Nerd Font"
+font-size = 14
+
+# Color scheme
+theme = Rose Pine
+
+# Opacity and background blur (macOS)
+background-opacity = 0.3
+background-blur = 20
+background-opacity-cells = true
+
+# Hide tab bar and window padding
+# window-decoration = none
+# window-padding = 0
+
+# Functionality
+
+# Set fish as default shell
+command = /opt/homebrew/bin/fish -l
+# command-args = "-l"
+
+# Set Environment Variables
+env = SHELL=/opt/homebrew/bin/fish
+
+# Keymaps
+
+# Scroll up/down
+keybind = super+up=scroll_page_fractional:-0.1
+keybind = super+down=scroll_page_fractional:0.1
+
+# Move between panes
+keybind = super+l=goto_split:right
+keybind = super+h=goto_split:left
+keybind = super+k=goto_split:up
+keybind = super+j=goto_split:down
+
+# Resize panes
+keybind = super+shift+h=resize_split:left,30
+keybind = super+shift+j=resize_split:down,30
+keybind = super+shift+k=resize_split:up,30
+keybind = super+shift+l=resize_split:right,30
+
+# Split panes
+keybind = super+]=new_split:right
+keybind = super+[=new_split:down
+
+# Close pane
+keybind = super+w=close_surface
+
+# Move between tabs
+keybind = super+left=previous_tab
+keybind = super+right=next_tab
+
+keybind = global:cmd+backquote=toggle_quick_terminal
+
+# Change font size
+keybind = super+shift++=increase_font_size
+keybind = super+shift+-=decrease_font_size
