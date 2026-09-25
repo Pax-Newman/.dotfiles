@@ -1,0 +1,20 @@
+# render: (add flags here if needed, e.g. --animate-interval=1500; otherwise delete this line)
+direction: right
+
+classes: {
+  bug: {style: {stroke: "#d62728"; stroke-width: 3; font-color: "#d62728"}}
+  ok: {style: {stroke: "#2ca02c"}}
+}
+
+client: Client
+api: API route
+svc: Service {class: bug}
+db: Database {shape: cylinder}
+
+client -> api: request
+api -> svc: calls
+svc -> db: writes without check {class: bug}
+
+note: |md
+  **Failure point:** the service never verifies X before writing.
+| {near: bottom-center}

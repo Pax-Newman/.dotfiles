@@ -1,0 +1,51 @@
+# Grid dashboard / capability map
+#
+# Use when: laying out cards in a tidy matrix rather than a connected graph --
+#           capability maps, team ownership boards, tech radars.
+# Render:   d2 grid-dashboard.d2 grid-dashboard.svg
+# Shows:    grid-columns / grid-rows / grid-gap, nested grids, classes.
+#
+# No layout-engine config here on purpose: a grid container positions its own
+# children, so the layout engine has nothing to decide inside it.
+
+classes: {
+  owned: {
+    style.fill: "#e6f2ff"
+  }
+  gap: {
+    style.fill: "#ffe6e6"
+    style.stroke-dash: 3
+  }
+}
+
+platform: Platform Capabilities {
+  grid-columns: 3
+  grid-gap: 30
+
+  ingest: Ingestion {
+    class: owned
+  }
+  catalogue: Catalogue {
+    class: owned
+  }
+  pricing: Pricing {
+    class: owned
+  }
+  checkout: Checkout {
+    class: owned
+  }
+  fulfilment: Fulfilment {
+    class: gap
+  }
+  returns: Returns {
+    class: gap
+  }
+}
+
+support: Cross-cutting {
+  grid-rows: 1
+
+  observability: Observability
+  identity: Identity
+  billing: Billing
+}

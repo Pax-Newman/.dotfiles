@@ -1,0 +1,40 @@
+# Request lifecycle sequence diagram
+#
+# Use when: showing the ordered exchange of messages between participants.
+# Render:   d2 sequence.d2 sequence.svg
+# Shows:    shape: sequence_diagram, explicit actor ordering, spans, groups,
+#           async (-->) messages, self-messages, notes.
+#
+# No layout-engine config here on purpose: sequence diagrams are laid out by
+# D2 itself and ignore the layout engine, so setting one would be misleading.
+
+checkout: Checkout request lifecycle {
+  shape: sequence_diagram
+
+  # Declare actors first -- in a sequence diagram, order of declaration fixes
+  # the left-to-right order of the lifelines.
+  client: Client
+  api: API Gateway
+  orders: Order Service
+  psp: Payment Provider
+  bus: Event Bus
+
+  client -> api: POST /checkout
+
+  # A group: a labelled box drawn around a run of messages.
+  authorise: {
+    api -> orders: create order
+    orders -> orders: validate basket
+
+    # A span (activation bar) is written as an ENDPOINT, `actor.span_name`,
+    # not as a block wrapping the messages.
+    orders.txn -> psp: authorise payment
+    psp -> orders.txn: auth token
+  }
+
+  orders -> bus: OrderPlaced
+  orders."payment captured asynchronously"
+
+  orders -> api: 201 Created
+  api -> client: order confirmation
+}

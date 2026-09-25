@@ -1,0 +1,63 @@
+# Microservice / system architecture
+#
+# Use when: showing how services, stores and external systems fit together.
+# Render:   d2 architecture.d2 architecture.svg
+# Shows:    containers, classes, shape vocabulary (cylinder/queue/cloud/person),
+#           connection labels, TALA layout.
+
+vars: {
+  d2-config: {
+    layout-engine: tala
+  }
+}
+
+classes: {
+  db: {
+    shape: cylinder
+    style.fill: "#e6f2ff"
+  }
+  queue: {
+    shape: queue
+    style.fill: "#fff4e6"
+  }
+  external: {
+    style.stroke-dash: 3
+    style.fill: "#f5f5f5"
+  }
+}
+
+customer: Customer {
+  shape: person
+}
+
+edge: Edge {
+  cdn: CDN
+  gateway: API Gateway
+}
+
+core: Order Platform {
+  orders: Order Service
+  payments: Payment Service
+  inventory: Inventory Service
+
+  orders_db: Orders DB {
+    class: db
+  }
+  events: order.events {
+    class: queue
+  }
+}
+
+stripe: Stripe {
+  class: external
+  shape: cloud
+}
+
+customer -> edge.cdn: static assets
+customer -> edge.gateway: REST
+edge.gateway -> core.orders: POST /orders
+core.orders -> core.orders_db: read/write
+core.orders -> core.events: publish OrderPlaced
+core.events -> core.inventory: reserve stock
+core.orders -> core.payments: authorise
+core.payments -> stripe: charge

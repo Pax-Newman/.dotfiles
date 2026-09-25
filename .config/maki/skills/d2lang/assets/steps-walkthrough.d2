@@ -1,0 +1,61 @@
+# Animated walkthrough with `steps`
+#
+# Use when: explaining a process by building the diagram up one stage at a time.
+# Render:   d2 --animate-interval=1400 steps-walkthrough.d2 steps-walkthrough.svg
+#           (SVG or GIF only -- a PNG shows a single board. Use --target to pick
+#           one board, e.g. --target='steps.step2'.)
+# Shows:    steps boards, cumulative inheritance (each step keeps the previous),
+#           styling a board to highlight what just changed.
+#
+# `steps` inherits from the PREVIOUS step. Use `scenarios` instead if each
+# variant should inherit from the root board, or `layers` for independent
+# diagrams that share a file.
+
+# Uses dagre: a deploy pipeline has one clear start and end, so a rank-based
+# top-down layout matches the order the steps are narrated in.
+vars: {
+  d2-config: {
+    layout-engine: dagre
+  }
+}
+
+classes: {
+  active: {
+    style.stroke: "#c0392b"
+    style.stroke-width: 3
+    style.bold: true
+  }
+}
+
+dev: Developer
+ci: CI Pipeline
+registry: Image Registry {
+  shape: cylinder
+}
+cluster: Kubernetes Cluster
+
+steps: {
+  step1: Push {
+    dev -> ci: git push
+    dev.class: active
+  }
+
+  step2: Build {
+    ci -> ci: run tests
+    ci -> registry: push image
+    ci.class: active
+  }
+
+  step3: Deploy {
+    registry -> cluster: pull image
+    cluster.class: active
+  }
+
+  step4: Serve {
+    users: Users {
+      shape: person
+    }
+    users -> cluster: traffic
+    cluster.class: active
+  }
+}

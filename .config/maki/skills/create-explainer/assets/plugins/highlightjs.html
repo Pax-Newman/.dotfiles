@@ -1,0 +1,22 @@
+<!-- PLUGIN: highlight.js 11.11.2 — syntax highlighting for LIGHT-DOM code.
+     Paste this whole block below the PLUGINS marker in the template. Delete
+     the block to remove code highlighting. Ships github (light) + github-dark
+     (dark, via prefers-color-scheme) themes; swap the css hrefs to retheme.
+
+     Usage in your content (light DOM only — see references/rich-content.md):
+       <pre><code class="language-python">def greet(name):
+           return f"Hello, {name}!"</code></pre>
+-->
+<script>
+Explainer.plugin({
+  css: [
+    { href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/styles/github.min.css" },
+    { href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/styles/github-dark.min.css",
+      media: "(prefers-color-scheme: dark)" }
+  ],
+  js: [
+    { src: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/highlight.min.js" }
+  ],
+  init: () => hljs.highlightAll()
+});
+</script>

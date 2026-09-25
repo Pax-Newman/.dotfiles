@@ -1,0 +1,54 @@
+# State machine / decision flowchart
+#
+# Use when: showing states and the transitions between them, or a branching
+#           decision flow.
+# Render:   d2 state-machine.d2 state-machine.svg
+# Shows:    diamond decision nodes, self-loops, labelled transitions,
+#           terminal states styled with a class.
+#
+# Uses dagre, not the usual tala: this is a flow with one clear start and two
+# terminal states, and dagre's rank-based layout keeps the entry point at the
+# top flowing downward. Tala places the initial state off to the right here.
+
+vars: {
+  d2-config: {
+    layout-engine: dagre
+  }
+}
+
+classes: {
+  terminal: {
+    shape: oval
+    style.fill: "#f0f0f0"
+    style.bold: true
+  }
+  decision: {
+    shape: diamond
+  }
+}
+
+start: Order Placed {
+  class: terminal
+}
+
+pending: Awaiting Payment
+check: Payment authorised? {
+  class: decision
+}
+paid: Paid
+picking: Picking
+shipped: Shipped {
+  class: terminal
+}
+cancelled: Cancelled {
+  class: terminal
+}
+
+start -> pending
+pending -> check: submit payment
+pending -> pending: retry card details
+check -> paid: yes
+check -> cancelled: no, after 3 attempts
+paid -> picking: stock reserved
+paid -> cancelled: out of stock
+picking -> shipped: handed to courier

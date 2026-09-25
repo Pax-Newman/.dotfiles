@@ -1,0 +1,21 @@
+# Bug NNN — <title>
+# Manual reproduction for humans. Not a pass/fail signal; see check.<ext>.
+# Never hard-code secrets. Obtain tokens via a script block or environment variable.
+
+@BASE_URL=http://localhost:8000
+
+### Setup: obtain a token (example)
+< {%
+  // e.g. spawn a CLI and store the token
+  // client.global.set("TOKEN", ...);
+%}
+GET {{BASE_URL}}/health
+
+### <What this request demonstrates>
+# Expected: <status / body when fixed>
+# Actual:   <status / body today>
+POST {{BASE_URL}}/api/resource/123
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{"field": "value"}

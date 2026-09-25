@@ -1,0 +1,57 @@
+# ER / relational schema
+#
+# Use when: documenting database tables and the relationships between them.
+# Render:   d2 er-schema.d2 er-schema.svg
+# Shows:    shape: sql_table, constraint (primary_key/foreign_key/unique),
+#           crow's-foot style cardinality via arrowhead labels.
+
+vars: {
+  d2-config: {
+    layout-engine: tala
+  }
+}
+
+customers: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  email: varchar(255) {constraint: unique}
+  created_at: timestamptz
+}
+
+orders: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  customer_id: uuid {constraint: foreign_key}
+  status: order_status
+  total_pence: bigint
+}
+
+order_lines: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  order_id: uuid {constraint: foreign_key}
+  product_id: uuid {constraint: foreign_key}
+  quantity: int
+}
+
+products: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  sku: varchar(64) {constraint: unique}
+  name: varchar(255)
+}
+
+orders.customer_id -> customers.id: {
+  source-arrowhead.label: "*"
+  target-arrowhead.label: "1"
+}
+
+order_lines.order_id -> orders.id: {
+  source-arrowhead.label: "*"
+  target-arrowhead.label: "1"
+}
+
+order_lines.product_id -> products.id: {
+  source-arrowhead.label: "*"
+  target-arrowhead.label: "1"
+}

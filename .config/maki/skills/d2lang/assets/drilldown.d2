@@ -1,0 +1,58 @@
+# Clickable drilldown with `layers`
+#
+# Use when: one overview diagram should link through to detailed sub-diagrams.
+# Render:   d2 drilldown.d2 drilldown.svg
+#           Open the SVG in a browser -- the links are only clickable there.
+#           A PNG export gets a numbered appendix instead.
+# Shows:    layers boards, `link` pointing at a board path, tooltips.
+#
+# `layers` boards do NOT inherit from the root, so each is an independent
+# diagram. Board paths in `link` are written from the root: layers.<name>.
+
+vars: {
+  d2-config: {
+    layout-engine: tala
+  }
+}
+
+gateway: API Gateway {
+  tooltip: Terminates TLS and routes by path prefix.
+}
+
+auth: Auth Service {
+  link: layers.auth
+  tooltip: Click to see the token exchange in detail.
+}
+
+orders: Order Service {
+  link: layers.orders
+  tooltip: Click to see the order state machine.
+}
+
+gateway -> auth: verify token
+gateway -> orders: place order
+orders -> auth: introspect token
+
+layers: {
+  auth: {
+    login: Login Endpoint
+    idp: Identity Provider
+    tokens: Token Store {
+      shape: cylinder
+    }
+
+    login -> idp: OIDC redirect
+    idp -> login: authorisation code
+    login -> tokens: persist refresh token
+    login -> tokens: issue access token
+  }
+
+  orders: {
+    received: Received
+    paid: Paid
+    shipped: Shipped
+
+    received -> paid: payment captured
+    paid -> shipped: warehouse dispatch
+  }
+}

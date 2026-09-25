@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EDIT: Explainer Title</title>
+
+  <!-- No math/code libraries ship by default. Need them? Add a PLUGIN:
+       see references/plugins.md (math → katex, code → highlightjs). -->
+
+  <style>
+    /* ===== Design tokens ===== */
+    :root {
+      color-scheme: light dark;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+      --bg: #ffffff;
+      --surface: #f7f7f8;
+      --surface-2: #eeeef0;
+      --text: #1a1a1e;
+      --text-muted: #5c5c66;
+      --border: #e0e0e4;
+      --accent: #3b5bdb;
+      --accent-contrast: #ffffff;
+
+      --note: #3b5bdb;
+      --tip: #2f9e44;
+      --warning: #e8a13a;
+      --danger: #e03131;
+      --correct: #2f9e44;
+      --incorrect: #e03131;
+
+      --radius: 10px;
+      --radius-sm: 6px;
+      --space: 1rem;
+      --maxw: 55rem;
+      --figw: min(72rem, 92vw);
+      --figw-wide: 80vw;
+      --shadow: 0 1px 2px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.05);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16161a;
+        --surface: #1e1e24;
+        --surface-2: #26262e;
+        --text: #ececf1;
+        --text-muted: #a0a0ab;
+        --border: #33333c;
+        --accent: #7391f5;
+        --accent-contrast: #10131f;
+        --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+      }
+    }
+
+    /* ===== Base ===== */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+    }
+    header, main, footer { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.25rem; }
+    header { padding-top: 3rem; }
+    main { padding-block: 1rem 3rem; }
+    footer {
+      padding-block: 2rem 3rem; color: var(--text-muted);
+      font-size: .9rem; border-top: 1px solid var(--border); margin-top: 2rem;
+    }
+    h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 .4rem; letter-spacing: -.02em; }
+    h2 { font-size: 1.5rem; margin: 2.4rem 0 .8rem; letter-spacing: -.01em; }
+    h3 { font-size: 1.2rem; margin: 1.8rem 0 .5rem; }
+    p { margin: 0 0 1rem; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+    .lead { font-size: 1.15rem; color: var(--text-muted); }
+
+    /* Light-DOM code (highlight.js targets these) */
+    pre {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem; overflow-x: auto; margin: 0 0 1.25rem;
+    }
+    pre code { background: none; padding: 0; font-size: .9em; }
+    code {
+      font-family: var(--font-mono); font-size: .88em;
+      background: var(--surface-2); padding: .12em .38em; border-radius: var(--radius-sm);
+    }
+    pre code.hljs { background: none; }
+
+    blockquote {
+      margin: 0 0 1.25rem; padding: .3rem 0 .3rem 1rem;
+      border-left: 3px solid var(--border); color: var(--text-muted);
+    }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    /* Figures: wider than the text column, centred; `wide` = 80vw */
+    body { overflow-x: clip; }
+    d2-figure, main > img, main > svg, main > figure {
+      --w: var(--figw);
+      width: var(--w); max-width: none;
+      margin-inline: calc((100% - var(--w)) / 2);
+    }
+    d2-figure[wide], main > img[wide], main > svg[wide], main > figure[wide] { --w: max(var(--figw), var(--figw-wide)); }
+    main > img, main > figure img { display: block; height: auto; }
+    main > figure { margin-block: 0 1.25rem; }
+    main > figure img, main > figure svg { width: 100%; height: auto; display: block; }
+    main > figure figcaption { text-align: center; color: var(--text-muted); font-size: .92rem; margin-top: .5rem; }
+
+    /* Click-to-expand affordance + zoom dialog */
+    .zoomable { cursor: zoom-in; }
+    .zoomable:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    d2-figure { position: relative; }
+    d2-figure:has(> svg.zoomable)::after {
+      content: '⤢'; position: absolute; top: .4rem; right: .4rem; pointer-events: none;
+      font-size: .9rem; line-height: 1; padding: .3rem .4rem; border-radius: var(--radius-sm);
+      background: var(--surface); border: 1px solid var(--border); color: var(--text-muted);
+      opacity: 0; transition: opacity .15s;
+    }
+    d2-figure:hover::after, d2-figure:focus-within::after { opacity: 1; }
+    dialog.zoom-view {
+      width: 95vw; height: 92vh; max-width: none; max-height: none; padding: 0;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--bg); color: var(--text); box-shadow: var(--shadow);
+      font-family: var(--font-sans); overflow: hidden;
+    }
+    dialog.zoom-view[open] { display: flex; flex-direction: column; }
+    dialog.zoom-view::backdrop { background: rgba(0,0,0,.6); }
+    .zoom-bar { display: flex; align-items: center; gap: .4rem; padding: .5rem .75rem;
+      border-bottom: 1px solid var(--border); background: var(--surface); }
+    .zoom-bar button { font: inherit; min-width: 2.2rem; padding: .25rem .6rem; cursor: pointer;
+      border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); }
+    .zoom-bar .pct { min-width: 3.5rem; text-align: center; font-size: .9rem; color: var(--text-muted); }
+    .zoom-bar form { margin-left: auto; }
+    .zoom-stage { flex: 1; overflow: auto; cursor: grab; touch-action: pan-x pan-y; }
+    .zoom-stage.dragging { cursor: grabbing; user-select: none; }
+    .zoom-content { --z: 1; width: calc(var(--z) * 100%); margin: auto; padding: 1rem; }
+    .zoom-content > svg, .zoom-content > img { width: 100%; height: auto; display: block; }
+    .zoom-cap { margin: 0; padding: .5rem 1rem; text-align: center; color: var(--text-muted);
+      font-size: .92rem; border-top: 1px solid var(--border); }
+    .zoom-cap:empty { display: none; }
+    ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- EDIT: title + one-line intro -->
+    <h1>EDIT: Explainer Title</h1>
+    <p class="lead">EDIT: A one-sentence hook describing what the reader will learn.</p>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         EDIT EVERYTHING IN <main>. Below is one live example of each
+         building block, each preceded by a one-line usage comment.
+         Delete the examples you don't need and write your content.
+         ============================================================ -->
+
+    <h2>Section heading</h2>
+    <p>Ordinary prose goes here. For syntax-highlighted code or typeset math,
+       add a plugin (see references/plugins.md) — the base template ships with
+       neither.</p>
+
+    <!-- CALL-OUT: type = note | tip | warning | danger -->
+    <call-out type="tip" title="Pro tip">
+      Slotted content is light DOM, so <code>code</code> and $math$ still render inside.
+    </call-out>
+
+    <!-- REVEAL: click-to-expand; summary attr is the clickable label -->
+    <reveal-block summary="Show the answer">
+      The hidden content goes here. Supports rich content too.
+    </reveal-block>
+
+    <!-- FLIP-CARD: click to flip; front/back via slots -->
+    <flip-card>
+      <span slot="front">What is 2 + 2?</span>
+      <span slot="back">4</span>
+    </flip-card>
+
+    <!-- QUIZ-MC: mark the right <quiz-option> with `correct`. Emits quiz-answered. -->
+    <quiz-mc question="Which keyword defines a function in Python?">
+      <quiz-option>func</quiz-option>
+      <quiz-option correct>def</quiz-option>
+      <quiz-option>function</quiz-option>
+      <quiz-option>fn</quiz-option>
+    </quiz-mc>
+
+    <!-- STEP-THROUGH: next/prev over <step-item>s, with progress + arrow keys -->
+    <step-through>
+      <step-item>First we parse the input.</step-item>
+      <step-item>Then we validate it.</step-item>
+      <step-item>Finally we return a result.</step-item>
+    </step-through>
+
+    <!-- D2-FIGURE: inline a pre-rendered D2 SVG, then declare steps that
+         reference D2 shape IDs (the SVG's <g id="..."> / element ids).
+         highlight = comma-separated ids to spotlight for that step.
+         See references/diagrams.md for the render-and-inline workflow.
+         Figures (and any <img>/<svg> in main) are wider than text and
+         click-to-zoom automatically. Add `wide` for 80vw, `no-zoom` to opt out. -->
+    <d2-figure>
+      <svg viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg" font-family="var(--font-sans)">
+        <g id="client"><rect x="10" y="30" width="80" height="34" rx="6"
+           fill="var(--surface)" stroke="var(--border)"/><text x="50" y="52"
+           text-anchor="middle" fill="var(--text)" font-size="13">client</text></g>
+        <g id="server"><rect x="120" y="30" width="80" height="34" rx="6"
+           fill="var(--surface)" stroke="var(--border)"/><text x="160" y="52"
+           text-anchor="middle" fill="var(--text)" font-size="13">server</text></g>
+        <g id="db"><rect x="230" y="30" width="80" height="34" rx="6"
+           fill="var(--surface)" stroke="var(--border)"/><text x="270" y="52"
+           text-anchor="middle" fill="var(--text)" font-size="13">db</text></g>
+        <line id="c-s" x1="90" y1="47" x2="120" y2="47" stroke="var(--text-muted)"/>
+        <line id="s-d" x1="200" y1="47" x2="230" y2="47" stroke="var(--text-muted)"/>
+      </svg>
+      <d2-step highlight="client, c-s, server">The client sends a request to the server.</d2-step>
+      <d2-step highlight="server, s-d, db">The server queries the database.</d2-step>
+    </d2-figure>
+
+    <!-- PROGRESS-TRACKER: optional, single instance. Listens for quiz-answered. -->
+    <progress-tracker></progress-tracker>
+  </main>
+
+  <footer>
+    <!-- EDIT: attribution / date / license -->
+    <p>Built with the create-explainer kit.</p>
+  </footer>
+
+  <!-- ================================================================
+       ===== DO NOT EDIT BELOW THIS LINE: component runtime =========
+       These customElements power every block above. Preserve verbatim.
+       ================================================================ -->
+
+  <!-- Plugin host: lets a plugin block declare CDN deps + init in one place.
+       See references/authoring-plugins.md for the Explainer.plugin contract. -->
+  <script>
+  (() => {
+    const ready = (fn) => document.readyState === 'loading'
+      ? document.addEventListener('DOMContentLoaded', fn) : fn();
+    window.Explainer = window.Explainer || {};
+
+    // Shared failure notice: one dismissible banner, one row per failed asset.
+    let banner = null;
+    const fail = (url) => {
+      console.error('[explainer] plugin asset failed to load: ' + url);
+      const show = () => {
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.setAttribute('role', 'alert');
+          banner.style.cssText = 'position:sticky;top:0;z-index:1000;background:var(--surface);' +
+            'border-bottom:3px solid var(--warning);color:var(--text);font-family:var(--font-sans);' +
+            'padding:.7rem 1rem;font-size:.9rem;box-shadow:var(--shadow);';
+          const head = document.createElement('div');
+          head.style.cssText = 'display:flex;gap:.5rem;align-items:baseline;justify-content:space-between;';
+          head.innerHTML = '<strong style="color:var(--warning)">▲ Some enhancements couldn\u2019t load</strong>' +
+            '<button aria-label="Dismiss" style="font:inherit;cursor:pointer;background:none;border:none;' +
+            'color:var(--text-muted);font-size:1.1rem;line-height:1">×</button>';
+          head.querySelector('button').addEventListener('click', () => banner.remove());
+          const list = document.createElement('ul');
+          list.className = 'explainer-fail-list';
+          list.style.cssText = 'margin:.35rem 0 0;padding-left:1.2rem;color:var(--text-muted);';
+          banner.append(head, list);
+          document.body.prepend(banner);
+        }
+        const li = document.createElement('li');
+        li.textContent = url;
+        li.style.wordBreak = 'break-all';
+        banner.querySelector('.explainer-fail-list').append(li);
+      };
+      ready(show);
+    };
+
+    // plugin({ css:[{href,integrity?,media?}], js:[{src,integrity?}], init? })
+    // Appends CSS links, loads JS in order, then runs init() once DOM is ready.
+    // Any asset that fails to load is reported (console + shared banner).
+    window.Explainer.plugin = ({ css = [], js = [], init } = {}) => {
+      css.forEach((c) => {
+        const l = document.createElement('link');
+        l.rel = 'stylesheet'; l.href = c.href;
+        if (c.integrity) { l.integrity = c.integrity; l.crossOrigin = 'anonymous'; }
+        if (c.media) l.media = c.media;
+        l.onerror = () => fail(c.href);
+        document.head.append(l);
+      });
+      let jsFailed = false;
+      const loadSeq = (i) => {
+        if (i >= js.length) { if (init && !jsFailed) ready(init); return; }
+        const s = document.createElement('script');
+        s.src = js[i].src;
+        if (js[i].integrity) { s.integrity = js[i].integrity; s.crossOrigin = 'anonymous'; }
+        s.onload = () => loadSeq(i + 1);
+        s.onerror = () => { jsFailed = true; fail(js[i].src); loadSeq(i + 1); }; // report all, skip init
+        document.head.append(s);
+      };
+      if (js.length) loadSeq(0); else if (init) ready(init);
+    };
+  })();
+  </script>
+
+  <!-- ===== PLUGINS: paste plugin blocks (from assets/plugins/) below ===== -->
+  <!-- e.g. <script>Explainer.plugin({ … })</script> — one block per plugin,
+       deletable as a unit. See references/plugins.md. -->
+
+  <script>
+  (() => {
+    const css = (s) => { const el = document.createElement('style'); el.textContent = s; return el; };
+    const SHARED = `
+      :host { display:block; margin:0 0 1.25rem; font-family:var(--font-sans); color:var(--text); }
+      button { font:inherit; color:inherit; cursor:pointer; }
+    `;
+
+    /* ---------- <call-out> ---------- */
+    customElements.define('call-out', class extends HTMLElement {
+      connectedCallback() {
+        const type = (this.getAttribute('type') || 'note').toLowerCase();
+        const title = this.getAttribute('title') || type[0].toUpperCase() + type.slice(1);
+        const icons = { note:'ⓘ', tip:'✦', warning:'▲', danger:'✖' };
+        const root = this.attachShadow({ mode:'open' });
+        root.append(css(SHARED + `
+          .box { border-left:4px solid var(--c); background:var(--surface);
+                 border-radius:var(--radius); padding:.85rem 1rem; }
+          .hd { display:flex; gap:.5rem; align-items:center; font-weight:600; margin-bottom:.35rem; color:var(--c); }
+          .ic { font-size:1.05em; } ::slotted(*){ margin:0; }
+        `));
+        const varMap = { note:'--note', tip:'--tip', warning:'--warning', danger:'--danger' };
+        const box = document.createElement('div');
+        box.className = 'box';
+        box.style.setProperty('--c', `var(${varMap[type] || '--note'})`);
+        box.innerHTML = `<div class="hd"><span class="ic">${icons[type]||icons.note}</span><span>${title}</span></div>`;
+        const slot = document.createElement('slot'); box.append(slot);
+        root.append(box);
+      }
+    });
+
+    /* ---------- <reveal-block> ---------- */
+    customElements.define('reveal-block', class extends HTMLElement {
+      connectedCallback() {
+        const summary = this.getAttribute('summary') || 'Reveal';
+        const root = this.attachShadow({ mode:'open' });
+        root.append(css(SHARED + `
+          details { border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); }
+          summary { padding:.7rem 1rem; font-weight:600; cursor:pointer; list-style:none; }
+          summary::-webkit-details-marker { display:none; }
+          summary::before { content:'▸'; display:inline-block; margin-right:.5rem; transition:transform .15s; color:var(--accent); }
+          details[open] summary::before { transform:rotate(90deg); }
+          .body { padding:0 1rem 1rem; } ::slotted(*){ margin:0; }
+        `));
+        root.innerHTML += `<details><summary>${summary}</summary><div class="body"><slot></slot></div></details>`;
+      }
+    });
+
+    /* ---------- <flip-card> ---------- */
+    customElements.define('flip-card', class extends HTMLElement {
+      connectedCallback() {
+        const root = this.attachShadow({ mode:'open' });
+        root.append(css(SHARED + `
+          .card { perspective:1000px; cursor:pointer; }
+          .inner { position:relative; transition:transform .5s; transform-style:preserve-3d;
+                   min-height:6rem; }
+          .card.flipped .inner { transform:rotateY(180deg); }
+          .face { position:absolute; inset:0; backface-visibility:hidden;
+                  display:flex; align-items:center; justify-content:center; text-align:center;
+                  padding:1.2rem; border:1px solid var(--border); border-radius:var(--radius);
+                  background:var(--surface); box-shadow:var(--shadow); }
+          .back { transform:rotateY(180deg); background:var(--surface-2); }
+          .hint { font-size:.75rem; color:var(--text-muted); text-align:center; margin-top:.4rem; }
+        `));
+        root.innerHTML += `
+          <div class="card"><div class="inner">
+            <div class="face front"><slot name="front"></slot></div>
+            <div class="face back"><slot name="back"></slot></div>
+          </div></div><div class="hint">click to flip</div>`;
+        const card = root.querySelector('.card');
+        card.addEventListener('click', () => card.classList.toggle('flipped'));
+      }
+    });
+
+    /* ---------- <quiz-mc> / <quiz-option> ---------- */
+    customElements.define('quiz-option', class extends HTMLElement {});
+    customElements.define('quiz-mc', class extends HTMLElement {
+      connectedCallback() {
+        const question = this.getAttribute('question') || '';
+        const opts = [...this.querySelectorAll('quiz-option')];
+        const root = this.attachShadow({ mode:'open' });
+        root.append(css(SHARED + `
+          .q { font-weight:600; margin-bottom:.6rem; }
+          .wrap { border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); padding:1rem; }
+          .opt { display:block; width:100%; text-align:left; padding:.6rem .8rem; margin:.35rem 0;
+                 border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg); }
+          .opt:hover:not(:disabled){ border-color:var(--accent); }
+          .opt:disabled { cursor:default; }
+          .opt.correct { border-color:var(--correct); background:color-mix(in srgb,var(--correct) 14%,var(--bg)); }
+          .opt.incorrect { border-color:var(--incorrect); background:color-mix(in srgb,var(--incorrect) 14%,var(--bg)); }
+          .mark { float:right; font-weight:700; }
+          .fb { margin-top:.6rem; font-size:.92rem; min-height:1.2em; }
+        `));
+        const wrap = document.createElement('div'); wrap.className = 'wrap';
+        if (question) { const q = document.createElement('div'); q.className='q'; q.textContent = question; wrap.append(q); }
+        const fb = document.createElement('div'); fb.className = 'fb';
+        opts.forEach(o => {
+          const b = document.createElement('button');
+          b.className = 'opt'; b.type = 'button';
+          b.innerHTML = o.innerHTML;
+          b.addEventListener('click', () => {
+            if (this._done) return; this._done = true;
+            const correct = o.hasAttribute('correct');
+            [...wrap.querySelectorAll('.opt')].forEach((btn,i) => {
+              btn.disabled = true;
+              if (opts[i].hasAttribute('correct')) { btn.classList.add('correct'); btn.innerHTML += '<span class="mark">✓</span>'; }
+            });
+            if (!correct) { b.classList.add('incorrect'); b.innerHTML += '<span class="mark">✕</span>'; }
+            fb.textContent = correct ? 'Correct!' : 'Not quite — the highlighted answer is correct.';
+            fb.style.color = correct ? 'var(--correct)' : 'var(--incorrect)';
+            this.dispatchEvent(new CustomEvent('quiz-answered', {
+              bubbles:true, composed:true, detail:{ correct }
+            }));
+          });
+          wrap.append(b);
+        });
+        wrap.append(fb);
+        root.append(wrap);
+      }
+    });
+
+    /* ---------- <step-through> / <step-item> ---------- */
+    customElements.define('step-item', class extends HTMLElement {});
+    customElements.define('step-through', class extends HTMLElement {
+      connectedCallback() {
+        const items = [...this.querySelectorAll('step-item')].map(el => el.innerHTML);
+        let i = 0;
+        const root = this.attachShadow({ mode:'open' });
+        root.append(css(SHARED + `
+          .wrap { border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); padding:1rem; }
+          .bar { height:5px; background:var(--surface-2); border-radius:99px; overflow:hidden; margin-bottom:.8rem; }
+          .fill { height:100%; background:var(--accent); transition:width .25s; }
+          .content { min-height:3.5rem; }
+          .nav { display:flex; align-items:center; justify-content:space-between; margin-top:.8rem; }
+          .nav button { padding:.4rem .9rem; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg); }
+          .nav button:disabled { opacity:.4; cursor:default; }
+          .count { font-size:.85rem; color:var(--text-muted); }
+        `));
+        root.innerHTML += `<div class="wrap">
+          <div class="bar"><div class="fill"></div></div>
+          <div class="content"></div>
+          <div class="nav"><button class="prev">‹ Prev</button>
+            <span class="count"></span><button class="next">Next ›</button></div></div>`;
+        const content = root.querySelector('.content'), fill = root.querySelector('.fill'),
+              count = root.querySelector('.count'), prev = root.querySelector('.prev'),
+              next = root.querySelector('.next');
+        const render = () => {
+          content.innerHTML = items[i] || '';
+          fill.style.width = items.length > 1 ? `${(i/(items.length-1))*100}%` : '100%';
+          count.textContent = `${i+1} / ${items.length}`;
+          prev.disabled = i === 0; next.disabled = i === items.length-1;
+        };
+        prev.addEventListener('click', () => { if (i>0){i--;render();} });
+        next.addEventListener('click', () => { if (i<items.length-1){i++;render();} });
+        this.tabIndex = 0;
+        this.addEventListener('keydown', e => {
+          if (e.key==='ArrowLeft'){prev.click();} if (e.key==='ArrowRight'){next.click();}
+        });
+        render();
+      }
+    });
+
+    /* ---------- <progress-tracker> ---------- */
+    customElements.define('progress-tracker', class extends HTMLElement {
+      connectedCallback() {
+        let correct = 0, total = 0;
+        const root = this.attachShadow({ mode:'open' });
+        root.append(css(SHARED + `
+          .wrap { position:sticky; bottom:1rem; border:1px solid var(--border); border-radius:99px;
+                  background:var(--surface); box-shadow:var(--shadow); padding:.5rem 1rem;
+                  display:flex; align-items:center; gap:.75rem; font-size:.9rem; }
+          .bar { flex:1; height:6px; background:var(--surface-2); border-radius:99px; overflow:hidden; }
+          .fill { height:100%; width:0; background:var(--correct); transition:width .3s; }
+          .label { font-weight:600; white-space:nowrap; }
+        `));
+        root.innerHTML += `<div class="wrap"><span class="label">Score 0 / 0</span>
+          <div class="bar"><div class="fill"></div></div></div>`;
+        const label = root.querySelector('.label'), fill = root.querySelector('.fill');
+        document.addEventListener('quiz-answered', e => {
+          total++; if (e.detail && e.detail.correct) correct++;
+          label.textContent = `Score ${correct} / ${total}`;
+          fill.style.width = total ? `${(correct/total)*100}%` : '0';
+        });
+      }
+    });
+
+    /* ---------- <d2-figure> / <d2-step> ----------
+       Inline-SVG diagrams in light DOM (slotted), so class toggles on shape
+       IDs work with no shadow-DOM barrier. Steps spotlight ids; static mode
+       (no <d2-step>) just shows the SVG. */
+    customElements.define('d2-step', class extends HTMLElement {});
+    customElements.define('d2-figure', class extends HTMLElement {
+      connectedCallback() {
+        // Inject highlight styles into light DOM (where the SVG lives).
+        if (!document.getElementById('d2-figure-styles')) {
+          const s = document.createElement('style'); s.id = 'd2-figure-styles';
+          s.textContent = `
+            d2-figure { display:block; margin-block:0 1.25rem; }
+            d2-figure svg { width:100%; height:auto; display:block; margin-inline:auto; }
+            d2-figure.stepping [id]{ transition:opacity .25s; }
+            d2-figure.stepping.dimming [id]{ opacity:.28; }
+            d2-figure [id].d2-hi{ opacity:1 !important; }
+            d2-figure [id].d2-hi rect,d2-figure [id].d2-hi > rect{ stroke:var(--accent); stroke-width:2; }
+            d2-figure [id].d2-hi line,d2-figure [id].d2-hi path,d2-figure [id].d2-hi.d2-hi > line{
+              stroke:var(--accent); stroke-width:2.5; }
+            .zoom-content.dimming [id]{ opacity:.28; }
+            .zoom-content [id].d2-hi{ opacity:1 !important; }
+            .zoom-content [id].d2-hi rect{ stroke:var(--accent); stroke-width:2; }
+            .zoom-content [id].d2-hi line,.zoom-content [id].d2-hi path{ stroke:var(--accent); stroke-width:2.5; }
+            .d2-nav{ display:flex; align-items:center; justify-content:center; gap:.75rem;
+              margin-top:.6rem; font-size:.9rem; color:var(--text-muted); }
+            .d2-nav button{ font:inherit; padding:.3rem .8rem; border:1px solid var(--border);
+              border-radius:var(--radius-sm); background:var(--surface); color:var(--text); cursor:pointer; }
+            .d2-nav button:disabled{ opacity:.4; cursor:default; }
+            .d2-cap{ text-align:center; margin:.5rem 0 0; color:var(--text-muted); font-size:.92rem; min-height:1.2em; }
+          `;
+          document.head.append(s);
+        }
+        const steps = [...this.querySelectorAll('d2-step')];
+        const svg = this.querySelector('svg');
+        if (!steps.length || !svg) return; // static mode
+
+        this.classList.add('stepping');
+        const data = steps.map(s => ({
+          ids: (s.getAttribute('highlight')||'').split(',').map(x=>x.trim()).filter(Boolean),
+          text: s.innerHTML
+        }));
+        steps.forEach(s => s.remove());
+
+        const cap = document.createElement('p'); cap.className = 'd2-cap';
+        const nav = document.createElement('div'); nav.className = 'd2-nav';
+        nav.innerHTML = `<button class="prev">‹</button><span class="ct"></span><button class="next">›</button>`;
+        this.append(cap, nav);
+        const prev = nav.querySelector('.prev'), next = nav.querySelector('.next'), ct = nav.querySelector('.ct');
+        let i = 0;
+        const clear = () => svg.querySelectorAll('.d2-hi').forEach(e => e.classList.remove('d2-hi'));
+        const render = () => {
+          clear();
+          const step = data[i];
+          this.classList.toggle('dimming', step.ids.length > 0);
+          step.ids.forEach(id => { const el = svg.querySelector('#'+CSS.escape(id)); if (el) el.classList.add('d2-hi'); });
+          cap.innerHTML = step.text;
+          ct.textContent = `${i+1} / ${data.length}`;
+          prev.disabled = i===0; next.disabled = i===data.length-1;
+        };
+        prev.addEventListener('click', () => { if(i>0){i--;render();} });
+        next.addEventListener('click', () => { if(i<data.length-1){i++;render();} });
+        render();
+      }
+    });
+
+    /* ---------- Click-to-expand zoom view ----------
+       Every <img>/<svg> in <main> (unless inside [no-zoom]) opens one shared
+       native <dialog>. Zoom = CSS var --z; pan = native scroll + mouse drag. */
+    const dlg = document.createElement('dialog');
+    dlg.className = 'zoom-view'; dlg.setAttribute('aria-label', 'Expanded figure');
+    dlg.innerHTML = `<div class="zoom-bar"><button class="out" aria-label="Zoom out">−</button>
+      <span class="pct">100%</span><button class="in" aria-label="Zoom in">+</button>
+      <button class="reset">Reset</button>
+      <form method="dialog"><button aria-label="Close">×</button></form></div>
+      <div class="zoom-stage"><div class="zoom-content"></div></div><p class="zoom-cap"></p>`;
+    const stage = dlg.querySelector('.zoom-stage'), zc = dlg.querySelector('.zoom-content'),
+          pct = dlg.querySelector('.pct'), zcap = dlg.querySelector('.zoom-cap');
+    let z = 1;
+    const setZ = (v) => { z = Math.min(4, Math.max(.5, v)); zc.style.setProperty('--z', z); pct.textContent = Math.round(z*100) + '%'; };
+    dlg.querySelector('.in').onclick = () => setZ(z * 1.25);
+    dlg.querySelector('.out').onclick = () => setZ(z / 1.25);
+    dlg.querySelector('.reset').onclick = () => { setZ(1); stage.scrollTo(0, 0); };
+    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('keydown', e => {
+      if (e.key === '+' || e.key === '=') setZ(z * 1.25);
+      if (e.key === '-') setZ(z / 1.25);
+      if (e.key === '0') setZ(1);
+    });
+    stage.addEventListener('wheel', e => {
+      if (e.ctrlKey || e.metaKey) { e.preventDefault(); setZ(z * (e.deltaY < 0 ? 1.1 : 1/1.1)); }
+    }, { passive:false });
+    let drag = null;
+    stage.addEventListener('pointerdown', e => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      drag = { x:e.clientX, y:e.clientY, l:stage.scrollLeft, t:stage.scrollTop };
+      stage.setPointerCapture(e.pointerId); stage.classList.add('dragging');
+    });
+    stage.addEventListener('pointermove', e => {
+      if (!drag) return;
+      stage.scrollLeft = drag.l - (e.clientX - drag.x); stage.scrollTop = drag.t - (e.clientY - drag.y);
+    });
+    const endDrag = () => { drag = null; stage.classList.remove('dragging'); };
+    stage.addEventListener('pointerup', endDrag); stage.addEventListener('pointercancel', endDrag);
+
+    const openZoom = (el) => {
+      const fig = el.closest('d2-figure, figure');
+      const clone = el.cloneNode(true);
+      clone.classList.remove('zoomable'); clone.removeAttribute('tabindex'); clone.removeAttribute('role');
+      zc.replaceChildren(clone);
+      zc.classList.toggle('dimming', !!(fig && fig.classList.contains('dimming')));
+      const c = fig && fig.querySelector('.d2-cap, figcaption');
+      zcap.innerHTML = c ? c.innerHTML : (el.getAttribute('alt') || '');
+      setZ(1); dlg.showModal(); stage.scrollTo(0, 0);
+    };
+    const initZoom = () => {
+      document.body.append(dlg);
+      document.querySelectorAll('main img, main svg').forEach(el => {
+        if (el.closest('[no-zoom]') || el.parentElement.closest('svg')) return;
+        el.classList.add('zoomable'); el.tabIndex = 0; el.setAttribute('role', 'button');
+        if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'Expand figure' + (el.alt ? ': ' + el.alt : ''));
+        el.addEventListener('click', () => openZoom(el));
+        el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openZoom(el); } });
+      });
+    };
+    document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', initZoom) : initZoom();
+  })();
+  </script>
+</body>
+</html>

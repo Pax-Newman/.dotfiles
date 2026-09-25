@@ -1,0 +1,4 @@
+[permissions]
+fs_read = true
+run = true
+fs_write = true
