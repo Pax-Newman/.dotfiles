@@ -8,8 +8,8 @@ font-size = 14
 theme = Rose Pine
 
 # Opacity and background blur (macOS)
-background-opacity = 0.3
-background-blur = 20
+background-opacity = 0.6
+background-blur = macos-glass-clear
 background-opacity-cells = true
 
 # Hide tab bar and window padding
