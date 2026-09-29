@@ -10,7 +10,7 @@ theme = Rose Pine
 # Opacity and background blur (macOS)
 background-opacity = 0.6
 background-blur = macos-glass-clear
-background-opacity-cells = true
+background-opacity-cells = false
 
 # Hide tab bar and window padding
 # window-decoration = none
